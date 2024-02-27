@@ -221,7 +221,7 @@ void third_test()
 
 void fourth_test()
 {
-    FILE* out_file = fopen("output2.txt", "w");
+    FILE* out_file = fopen("output1.txt", "w");
     if (out_file == NULL)
     {
         printf("Error of opening file\n");
