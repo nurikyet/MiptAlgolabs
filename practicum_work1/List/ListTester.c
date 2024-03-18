@@ -1,89 +1,18 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <assert.h>
-#include <time.h>
+#include "StackList.h"
+#include "ListTester.h"
 
-typedef struct Node node_t;
-typedef struct Stack stack_t;
-
-struct Node
-{
-    int value;
-    node_t* next;
-};
-
-struct Stack
-{
-    node_t* head;
-    int num;
-};
-
-stack_t* StackCtor()
-{
-
-    stack_t* stk = (stack_t*)calloc(1, sizeof(stack_t));
-
-    stk->head     = NULL;
-    stk->num      = 0;
-
-    return stk;
-}
-
-int StackPush(stack_t* stk, const int value)
-{
-    assert(stk);
-
-    node_t* new_node = (node_t*)calloc(1, sizeof(node_t));
-
-    new_node->value    = value;
-    new_node->next     = stk->head;
-
-    stk->head          = new_node;
-    stk->num++;
-
-    return 1;
-}
-
-int StackPop(stack_t* stk)
-{
-    if (stk->num == 0)
-    {
-        printf("I can't pop element\n");
-        return 0;
-    }
-
-    stk->head = stk->head->next;
-    stk->num--;
-
-    return 1;
-}
-
-int StackTop(stack_t* stk)
-{
-    return(stk->head->value);
-}
-
-void StackDtor(stack_t* stk)
-{
-    for (int i = 0; i < stk->num; i++)
-    {
-        StackPop(stk);
-    }
-    free(stk);
-}
-
-void first_test()
+void first_test(int number_of_tests)
 {
     double time_test1 = 0.0;
 
-    for (int t = 0; t < 3; t++)
+    for (int t = 0; t < number_of_tests; t++)
     {
-        stack_t* stk1 = StackCtor();
+        stack_t* stk1 = StackCtor(sizeof(VALUE));
         clock_t begin = clock();
 
         for(int i = 0; i < 1000000; i++)
         {
-            StackPush(stk1, i);
+            StackPush(stk1, &i);
         }
 
         while (stk1->num > 100000)
@@ -95,7 +24,7 @@ void first_test()
 
             for (int i = 0; i < stk1->num / 4; i++)
             {
-                StackPush(stk1, i);
+                StackPush(stk1, &i);
             }
         }
 
@@ -105,25 +34,25 @@ void first_test()
         StackDtor(stk1);
     }
 
-    time_test1 /= 3.0;
+    time_test1 /= number_of_tests;
 
     printf("Test 1 spends %f sec\n", time_test1);
 
     return;
 }
 
-void second_test()
+void second_test(int number_of_tests)
 {
     double time_test2 = 0.0;
 
-    for (int i = 0; i < 3; i++)
+    for (int t = 0; t < number_of_tests; t++)
     {
-        stack_t* stk2 = StackCtor();
+        stack_t* stk2 = StackCtor(sizeof(VALUE));
         clock_t begin     = clock();
 
         for(int i = 0; i < 1000000; i++)
         {
-            StackPush(stk2, i);
+            StackPush(stk2, &i);
         }
 
         for (int i = 0; i < 100; i++)
@@ -135,7 +64,7 @@ void second_test()
 
             for (int k = 0; k < 10000; k++)
             {
-                StackPush(stk2, k);
+                StackPush(stk2, &k);
             }
         }
 
@@ -148,7 +77,7 @@ void second_test()
 
             for (int i = 0; i < stk2->num / 4; i++)
             {
-                StackPush(stk2, i);
+                StackPush(stk2, &i);
             }
         }
 
@@ -161,7 +90,7 @@ void second_test()
 
             for (int k = 0; k < 10000; k++)
             {
-                StackPush(stk2, k);
+                StackPush(stk2, &k);
             }
         }
         clock_t end = clock();
@@ -171,24 +100,24 @@ void second_test()
     }
 
 
-    time_test2 /= 3.0;
+    time_test2 /= number_of_tests;
 
     printf("Test 2 spends %f sec\n", time_test2);
 }
 
-void third_test()
+void third_test(int number_of_tests)
 {
     double time_test3 = 0.0;
 
-    for (int t = 0; t < 3; t++)
+    for (int t = 0; t < number_of_tests; t++)
     {
-        stack_t* stk3 = StackCtor();
+        stack_t* stk3 = StackCtor(sizeof(VALUE));
 
         for (int i = 0; i < 1000000; i++)
         {
-            StackPush(stk3, i);
+            StackPush(stk3, &i);
         }
-        srand(time(NULL));
+        srand((unsigned int)time(NULL));
 
         clock_t begin = clock();
 
@@ -197,7 +126,7 @@ void third_test()
             int randomNumber = rand() % 2 + 1;
             if (randomNumber == 1)
             {
-                StackPush(stk3, randomNumber);
+                StackPush(stk3, &randomNumber);
             }
             else
             {
@@ -210,7 +139,7 @@ void third_test()
         time_test3 += (double) (end - begin) / CLOCKS_PER_SEC;
     }
 
-    time_test3 /= 3.0;
+    time_test3 /= number_of_tests;
 
     printf("Test 3 spends %f sec\n", time_test3);
     return;
@@ -218,14 +147,14 @@ void third_test()
 
 void fourth_test()
 {
-    FILE* out_file = fopen("output2.txt", "w");
+    FILE* out_file = fopen("res_list_stack.txt", "w");
     if (out_file == NULL)
     {
         printf("Error of opening file\n");
     }
     double spend_time = 0.0;
 
-    stack_t* stk4 = StackCtor();
+    stack_t* stk4 = StackCtor(sizeof(VALUE));
     clock_t begin = clock();
 
     for (int i = 0; i <= 1000000; i++)
@@ -233,21 +162,11 @@ void fourth_test()
         if (i % 1000 == 0)
         {
             clock_t end   = clock();
-            spend_time = ((double)(end - begin)) / CLOCKS_PER_SEC;
+            spend_time    = ((double)(end - begin)) / CLOCKS_PER_SEC;
             fprintf(out_file, "%d %f\n", i, spend_time);
         }
-        StackPush(stk4, i);
+        StackPush(stk4, &i);
     }
     StackDtor(stk4);
     fclose(out_file);
-}
-
-int main()
-{
-    first_test();
-    second_test();
-    third_test();
-    fourth_test();
-
-    return 0;
 }
