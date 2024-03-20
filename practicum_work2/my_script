@@ -1,0 +1,26 @@
+#!/bin/bash
+
+small_TESTS="very_small_tests"
+SMALL_TESTS="small_tests"
+BIG_TESTS="big_tests"
+DUB_TESTS="tests_most_dublicates"
+
+k=5
+
+max_rand=32767
+
+from=0
+to=150
+step=1
+
+mkdir $small_TESTS
+
+for ((i=$from; i <= $to; i+=$step))
+do
+for ((j=0; j < $k; j++))
+do
+./ArrCtor $i $j $max_rand $RANDOM 
+./LibQsort $i $j
+done
+done
+
