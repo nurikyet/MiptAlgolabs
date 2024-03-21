@@ -1,3 +1,3 @@
-void CountSort(int* arr, int n, int digit_pos);
+void RadixSortMSD(int *arr, int *result, int n, int shift);
 
-void RadixSort(int* arr, size_t n);
+void MSD(int* arr, size_t size);

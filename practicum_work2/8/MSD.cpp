@@ -3,56 +3,53 @@
 #include <assert.h>
 #include <string.h>
 #include <time.h>
-#include "../Common.h"
 #include "MSD.h"
 
-#define MAX 256
+#define MAX 255
+#define SHIFT 8
 
-void CountSort(int* arr, int n, int digit_pos)
+void RadixSortMSD(int *arr, int *result, int n, int shift) 
 {
-    int count[10] = {0};
-    int* output = (int*)malloc(n * sizeof(int));
+    int count[MAX+1]    = {0};
+    int pref_cnt[MAX+1] = {0};
 
-    for (int i = 0; i < n; i++) 
+    for (int i = 0; i < n; ++i) 
     {
-        int digit = (arr[i] / digit_pos) % 10;
-        count[digit]++;
+        count[(arr[i] >> shift) & 0xFF]++;
     }
 
-    for (int i = 1; i < 10; i++) 
+    pref_cnt[0] = 0;
+    for (int i = 1; i <= MAX; ++i) 
     {
-        count[i] += count[i - 1];
+        pref_cnt[i] = pref_cnt[i-1] + count[i-1];
     }
 
-    for (int i = n - 1; i >= 0; i--) 
+    for (int i = 0; i < n; ++i) 
     {
-        int digit = (arr[i] / digit_pos) % 10;
-        output[--count[digit]] = arr[i];
+        result[pref_cnt[(arr[i] >> shift) & 0xFF]++] = arr[i];
     }
 
-    for (int i = 0; i < n; i++) 
+    if (shift > 0) 
     {
-        arr[i] = output[i];
-    }
-
-    free(output);
-}
-
-void RadixSort(int* arr, size_t n) 
-{
-    int max_num = 0;
-    for (int i = 0; i < (int)n; i++) 
-    {
-        if (arr[i] > max_num) 
+        for (int i = 0; i < MAX; ++i) 
         {
-            max_num = arr[i];
+            if (count[i] > 1) 
+            {
+                RadixSortMSD(result + pref_cnt[i], arr + pref_cnt[i], count[i], shift - SHIFT);
+            }
         }
     }
+}
 
-    int digit_pos = 1;
-    while (max_num / digit_pos > 0) 
+void MSD(int* arr, size_t size) 
+{
+    int* result = (int*)malloc(size * sizeof(int));
+    RadixSortMSD(arr, result, size, sizeof(int) * 8);
+    
+    for (size_t i = 0; i < size; ++i) 
     {
-        CountSort(arr, (int)n, digit_pos);
-        digit_pos *= 10;
+        arr[i] = result[i];
     }
+    
+    free(result);
 }
