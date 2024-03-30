@@ -1,1 +1,0 @@
-void BubbleSort(int* arr, size_t size);
