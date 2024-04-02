@@ -7,9 +7,6 @@
 const int POISON = 0;
 const int VALUE  = 5;
 
-#define TRUE  1;
-#define FALSE 0;
-
 typedef struct Node node_t;
 typedef struct Stack stack_t;
 
@@ -33,3 +30,10 @@ int StackPop(stack_t* stk);
 int StackTop(stack_t* stk, void* element);
 
 void StackDtor(stack_t* stk);
+
+enum Errors 
+{
+    TRUE                       = 0,
+    ERROR_OF_ALLOCATING_MEMORY = 1,
+    ERROR_SIZE                 = 2
+};

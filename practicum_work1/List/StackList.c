@@ -25,16 +25,14 @@ int StackPush(stack_t* stk, void* value)
     node_t* new_node = (node_t*)calloc(1, sizeof(node_t));
     if (new_node == NULL)
     {
-        printf("You can't push new element. Function %s: not enough memory to allocate", __func__);
-        return FALSE;
+        return ERROR_OF_ALLOCATING_MEMORY;
     }
 
     new_node->value = calloc(1, stk->element_size);
     if (new_node->value == NULL)
     {
-        printf("You can't push new element. Function %s: not enough memory to allocate", __func__);
         free(new_node);
-        return FALSE;
+        return ERROR_OF_ALLOCATING_MEMORY;
     }
 
     memcpy(new_node->value, value, stk->element_size);
@@ -53,8 +51,7 @@ int StackPop(stack_t* stk)
 
     if (stk->num == 0)
     {
-        printf("I can't pop element\n");
-        return FALSE;
+        return ERROR_OF_ALLOCATING_MEMORY;
     }
 
     stk->head = stk->head->next;
@@ -69,8 +66,7 @@ int StackTop(stack_t* stk, void* element)
 
     if (stk->num == 0)
     {
-        printf("Stack is empty, no top element\n");
-        return FALSE;
+        return ERROR_SIZE;
     }
     element = (stk->head->value);
     return TRUE;
