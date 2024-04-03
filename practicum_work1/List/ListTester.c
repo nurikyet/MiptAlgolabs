@@ -15,14 +15,14 @@ void first_test(int number_of_tests)
             StackPush(stk1, &i);
         }
 
-        while (stk1->num > 100000)
+        while (stk1->size > 100000)
         {
-            for (int i = 0; i < stk1->num / 2; i++)
+            for (int i = 0; i < stk1->size / 2; i++)
             {
                 StackPop(stk1);
             }
 
-            for (int i = 0; i < stk1->num / 4; i++)
+            for (int i = 0; i < stk1->size / 4; i++)
             {
                 StackPush(stk1, &i);
             }
@@ -68,14 +68,14 @@ void second_test(int number_of_tests)
             }
         }
 
-        while(stk2->num > 100000)
+        while(stk2->size > 100000)
         {
-            for (int i = 0; i < stk2->num / 2; i++)
+            for (int i = 0; i < stk2->size / 2; i++)
             {
                 StackPop(stk2);
             }
 
-            for (int i = 0; i < stk2->num / 4; i++)
+            for (int i = 0; i < stk2->size / 4; i++)
             {
                 StackPush(stk2, &i);
             }

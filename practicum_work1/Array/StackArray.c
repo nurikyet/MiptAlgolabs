@@ -7,7 +7,7 @@ stack_t* StackCtor(size_t capacity, size_t element_size)
     stack_t* stk = (stack_t*)calloc(1, sizeof(stack_t));
     if (stk == NULL)
     {
-        printf("Function %s: not enough memory to allocate - %d", __func__, __LINE__);
+        assert(false);
     }
 
     stk->capacity = capacity;
@@ -16,7 +16,7 @@ stack_t* StackCtor(size_t capacity, size_t element_size)
     void* data = calloc(capacity, element_size);
     if (data == NULL)
     {
-        printf("Insufficient amount of memory - %d\n", __LINE__);
+        assert(false);
     }
 
     stk->element_size = element_size;
@@ -24,7 +24,6 @@ stack_t* StackCtor(size_t capacity, size_t element_size)
     if (stk->data == NULL)
     {
         stk->capacity = 0;
-        printf("Function %s: not enough memory to allocate - %d", __func__, __LINE__);
         return NULL;
     }
 
@@ -45,13 +44,14 @@ int StackPush(stack_t* stk, void* value)
     {
         StackRealloc(stk, COEFFICIENT_UP);
     }
-    
+
     void* data  = stk->data + (stk->size)*(stk->element_size);
     if (data == NULL)
     {
         return ERROR_OF_ALLOCATING_MEMORY;
     }
-    data = memcpy(data, value, stk->element_size);
+
+    memcpy(data, value, stk->element_size);
     if (data == NULL)
     {
         return ERROR_OF_ALLOCATING_MEMORY;
@@ -59,7 +59,7 @@ int StackPush(stack_t* stk, void* value)
     
     (stk->size)++;
 
-    return TRUE;
+    return NO_ERROR;
 }
 
 int StackPop(stack_t* stk)
@@ -70,13 +70,13 @@ int StackPop(stack_t* stk)
     {
         return ERROR_SIZE;
     }
-    if (stk->size == (size_t)(BOUNDARY_REALLOC*stk->capacity))
+    if (stk->size == (size_t)(BOUNDARY_REALLOC*(double)stk->capacity))
     {
         StackRealloc(stk, COEFFICIENT_DOWN);
     }
     stk->size--;
 
-    return TRUE;
+    return NO_ERROR;
 }
 
 int StackTop(stack_t* stk, void* element)
@@ -90,8 +90,8 @@ int StackTop(stack_t* stk, void* element)
     }
     void* value = stk->data + (stk->size - 2)*(stk->element_size);
 
-    memcpy(element, value, sizeof(value));
-    return TRUE;
+    memcpy(element, value, stk->element_size);
+    return NO_ERROR;
 }
 
 void StackDtor(stack_t* stk)
@@ -104,17 +104,18 @@ void StackDtor(stack_t* stk)
     free(stk);
 }
 
-void StackRealloc(stack_t* stk, double coef)
+int StackRealloc(stack_t* stk, double coef)
 {
     assert(stk);
 
-    size_t new_size = (size_t)(coef*(stk->capacity)*sizeof(int));
+    size_t new_size = (size_t)(coef*(double)((stk->capacity)*sizeof(int)));
     void* new_data = (void*) realloc(stk->data, new_size);
     if(new_data == NULL)
     {
-        printf("Error of allocating memmory - %d\n", __LINE__);
-        return;
+        return ERROR_OF_ALLOCATING_MEMORY;
     }
     stk->data     = new_data;
-    stk->capacity = coef * stk->capacity;
+    stk->capacity = (size_t)(coef * (double)stk->capacity);
+
+    return NO_ERROR;
 }
