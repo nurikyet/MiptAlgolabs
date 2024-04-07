@@ -2,7 +2,8 @@
 
 stack_t* StackCtor(size_t capacity, size_t element_size)
 {
-    assert(capacity > 0);
+    assert(capacity     > 0);
+    assert(element_size > 0);
 
     stack_t* stk = (stack_t*)calloc(1, sizeof(stack_t));
     if (stk == NULL)
@@ -32,8 +33,9 @@ stack_t* StackCtor(size_t capacity, size_t element_size)
 
 int StackPush(stack_t* stk, void* value)
 {
-    assert(stk);
-    assert(value);
+    assert(stk       != NULL);
+    assert(stk->data != NULL);
+    assert(value     != NULL);
 
     if(stk->size > stk->capacity)
     {
@@ -64,7 +66,8 @@ int StackPush(stack_t* stk, void* value)
 
 int StackPop(stack_t* stk)
 {
-    assert(stk);
+    assert(stk       != NULL);
+    assert(stk->data != NULL);
 
     if (stk->size == 0)
     {
@@ -82,7 +85,8 @@ int StackPop(stack_t* stk)
 int StackTop(stack_t* stk, void* element)
 {
     assert(element);
-    assert(stk);
+    assert(stk       != NULL);
+    assert(stk->data != NULL);
 
     if (stk->size == 0)
     {
@@ -96,7 +100,8 @@ int StackTop(stack_t* stk, void* element)
 
 void StackDtor(stack_t* stk)
 {
-    assert(stk);
+    assert(stk       != NULL);
+    assert(stk->data != NULL);
 
     free(stk->data);
     stk->size     = 0;
@@ -106,7 +111,8 @@ void StackDtor(stack_t* stk)
 
 int StackRealloc(stack_t* stk, double coef)
 {
-    assert(stk);
+    assert(stk       != NULL);
+    assert(stk->data != NULL);
 
     size_t new_size = (size_t)(coef*(double)((stk->capacity)*sizeof(int)));
     void* new_data = (void*) realloc(stk->data, new_size);

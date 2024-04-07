@@ -6,7 +6,7 @@ CFLAGS = -Wshadow -Winit-self -Wredundant-decls -Wcast-align -Wundef -Wfloat-equ
 -Wnon-virtual-dtor -Woverloaded-virtual -Wpointer-arith -Wsign-promo -Wstack-usage=8192 -Wstrict-aliasing\
 -Wstrict-null-sentinel -Wtype-limits -Wwrite-strings -Werror=vla -D_DEBUG -D_EJUDGE_CLIENT_SIDE
 
-all: StackArrayRes.exe
+all: StackArrayRes
 
 StackArrayRes.exe: ArrayMain.o StackArray.o ArrayTester.o
 	$(CC) $^ -o $@
