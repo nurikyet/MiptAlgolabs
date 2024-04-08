@@ -7,6 +7,13 @@
 #define MAX_LEN 1000001
 #define LINE_LEN 40
 
+enum Status
+{
+    NO_ERROR                = 0,
+    ERROR_SCANF             = 1,
+    ERROR_ALLOCATING_MEMORY = 2
+};
+
 typedef struct
 {
     long long data;
@@ -23,7 +30,7 @@ typedef struct
     int capacity;
 } Heap;
 
-void ReadCommands(Heap* heap);
+int ExecuteCommands(Heap* heap);
 void HeapDtor(Heap* heap);
 Heap* HeapCtor();
 
@@ -31,7 +38,7 @@ int main()
 {
     Heap* heap = HeapCtor();
 
-    ReadCommands(heap);
+    ExecuteCommands(heap);
     HeapDtor(heap);
 
     return 0;
@@ -39,7 +46,9 @@ int main()
 
 void SwapData(Heap* heap, int first, int second)
 {
-    assert(heap != NULL);
+    assert(heap          != NULL);
+    assert(heap->array   != NULL);
+    assert(heap->request != NULL);
     assert(first >= 0);
     assert(second >= 0);
 
@@ -51,7 +60,9 @@ void SwapData(Heap* heap, int first, int second)
 
 void SwapRequests(Heap* heap, int first, int second)
 {
-    assert(heap != NULL);
+    assert(heap          != NULL);
+    assert(heap->array   != NULL);
+    assert(heap->request != NULL);
     assert(first >= 0);
     assert(second >= 0);
 
@@ -65,7 +76,9 @@ void SwapRequests(Heap* heap, int first, int second)
 
 void swap(Heap* heap, int first, int second)
 {
-    assert(heap != NULL);
+    assert(heap          != NULL);
+    assert(heap->array   != NULL);
+    assert(heap->request != NULL);
     assert(first >= 0);
     assert(second >= 0);
 
@@ -86,7 +99,7 @@ int GetParent(int index)
 int GetLeftChild(int index, int size)
 {
     assert(index >= 0);
-    assert(size >= 0);
+    assert(size  >= 0);
 
     int left = 2 * index + 1;
     if (left >= size)
@@ -111,14 +124,18 @@ int GetRightChild(int index, int size)
 
 long long GetMin(Heap* heap)
 {
-    assert(heap != NULL);
+    assert(heap          != NULL);
+    assert(heap->array   != NULL);
+    assert(heap->request != NULL);
 
     return heap->array[0].data;
 }
 
 void SiftUp(Heap* heap, int index)
 {
-    assert(heap != NULL);
+    assert(heap          != NULL);
+    assert(heap->array   != NULL);
+    assert(heap->request != NULL);
     assert(index >= 0);
 
     while (index > 0)
@@ -140,7 +157,9 @@ void SiftUp(Heap* heap, int index)
 
 void SiftDown(Heap* heap, int index)
 {
-    assert(heap != NULL);
+    assert(heap          != NULL);
+    assert(heap->array   != NULL);
+    assert(heap->request != NULL);
     assert(index >= 0);
 
     while (index * 2 + 1 < heap->size)
@@ -174,11 +193,15 @@ void SiftDown(Heap* heap, int index)
 Heap* HeapCtor()
 {
     Heap* heap     = (Heap*)calloc(1, sizeof(Heap));
+    if (heap == NULL)
+    {
+        return NULL;
+    }
+
     Element* array = (Element*)calloc(MAX_LEN, sizeof(Element));
     if (array == NULL)
     {
-        printf("Error of allocation of memory - %d\n", __LINE__);
-        assert(false);
+        return NULL;
     }
     heap->array    = array;
     
@@ -187,8 +210,7 @@ Heap* HeapCtor()
     Element** request = (Element**)calloc(MAX_LEN, sizeof(Element*));
     if (request == NULL)
     {
-        printf("Error of allocation of memory - %d\n", __LINE__);
-        assert(false);
+        return NULL;
     }
     heap->request  = request;
     return heap;
@@ -196,7 +218,9 @@ Heap* HeapCtor()
 
 void HeapInsert(Heap* heap, long long new_element, int number)
 {
-    assert(heap != NULL);
+    assert(heap          != NULL);
+    assert(heap->array   != NULL);
+    assert(heap->request != NULL);
 
     heap->array[heap->size].data   = new_element;
     heap->array[heap->size].number = number;
@@ -209,7 +233,9 @@ void HeapInsert(Heap* heap, long long new_element, int number)
 
 long long ExtractMin(Heap* heap)
 {
-    assert(heap != NULL);
+    assert(heap          != NULL);
+    assert(heap->array   != NULL);
+    assert(heap->request != NULL);
     assert(heap->size > 0);
 
     long long root = heap->array[0].data;
@@ -223,7 +249,9 @@ long long ExtractMin(Heap* heap)
 
 void HeapDtor(Heap* heap)
 {
-    assert(heap != NULL);
+    assert(heap          != NULL);
+    assert(heap->array   != NULL);
+    assert(heap->request != NULL);
 
     free(heap->array);
     free(heap->request);
@@ -236,7 +264,9 @@ void HeapDtor(Heap* heap)
 
 void DecreaseKey(Heap* heap, int number, long long difference)
 {
-    assert(heap != NULL);
+    assert(heap          != NULL);
+    assert(heap->array   != NULL);
+    assert(heap->request != NULL);
 
     int index_in_array = (*(heap->request[number])).index;
     heap->array[index_in_array].data -= difference;
@@ -244,23 +274,34 @@ void DecreaseKey(Heap* heap, int number, long long difference)
     SiftUp(heap, index_in_array);
 }
 
-void ReadCommands(Heap* heap)
+int ExecuteCommands(Heap* heap)
 {
-    assert(heap != NULL);
+    assert(heap          != NULL);
+    assert(heap->array   != NULL);
+    assert(heap->request != NULL);
 
     size_t commands_num = 0;
-    scanf("%ld", &commands_num);
+    if (scanf("%ld", &commands_num) <= 0)
+    {
+        return ERROR_SCANF;
+    }
 
     char line[LINE_LEN] = "";
 
     for (size_t i = 0; i < commands_num; i++)
     {
-        scanf("%s", line);
+        if (scanf("%s", line) <= 0)
+        {
+            return ERROR_SCANF;
+        }
 
         if (strcmp(line, "insert") == 0)
         {
             long long new_element = 0;
-            scanf("%lld", &new_element);
+            if (scanf("%lld", &new_element) <= 0)
+            {
+                return ERROR_SCANF;
+            }
             HeapInsert(heap, new_element, i + 1);
         }
 
@@ -278,9 +319,11 @@ void ReadCommands(Heap* heap)
         else if (strcmp(line, "decreaseKey") == 0)
         {
             int           number = 0;
-
             long long difference = 0;
-            scanf("%d %lld", &number, &difference);
+            if (scanf("%d %lld", &number, &difference) <= 0)
+            {
+                return ERROR_SCANF;
+            }
 
             DecreaseKey(heap, number, difference);
         }
