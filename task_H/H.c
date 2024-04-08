@@ -3,17 +3,39 @@
 #include <stdbool.h>
 #include <assert.h>
 
+enum Status
+{
+    NO_ERROR                   = 0,
+    ERROR_SIZE                 = 1,
+    ERROR_OF_SCANF             = 2,
+    ERROR_OF_ALLOCATING_MEMORY = 3 
+};
+
 void quickSort(int* array, int low, int high);
 
 int main()
 {
     int number_of_elements = 0;
-    scanf("%d", &number_of_elements);
+    if (scanf("%d", &number_of_elements) <= 0)
+    {
+        return ERROR_OF_SCANF;
+    }
+    if (number_of_elements <= 0)
+    {
+        return ERROR_SIZE;
+    }
 
-    int array[number_of_elements];
+    int* array = calloc(number_of_elements, sizeof(int));
+    if (array == NULL)
+    {
+        return ERROR_OF_ALLOCATING_MEMORY;
+    }
     for (int i = 0; i < number_of_elements; i++)
     {
-        scanf("%d", &array[i]);
+        if (scanf("%d", &array[i]) <= 0)
+        {
+            return ERROR_OF_SCANF;
+        }
     }
 
     quickSort(array, 0, number_of_elements - 1);
