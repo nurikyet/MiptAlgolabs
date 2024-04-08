@@ -4,20 +4,34 @@
 #include <assert.h>
 #include <stdbool.h>
 
-#define MAX_SIZE 10000
+#define MAX_SIZE 100
+#define LINE_LEN 40
+#define COEFFICIENT_UP 2
+#define COEFFICIENT_DOWN 0.5
+#define BOUNDARY_REALLOC 0.25
+
+enum Status 
+{
+    NO_ERROR                   = 0,
+    ERROR_OF_ALLOCATING_MEMORY = 1,
+    ERROR_SIZE                 = 2
+};
 
 typedef struct
 {
     int* data;
     int size;
-} Stack;
+    int capacity
+}Stack;
+
+int StackRealloc(Stack* stk, double coef);
+int pop(Stack* stack, FILE* fp);
+int back(Stack* stack, FILE* fp);
+int initStack(Stack* stack, int capacity);
+int push(Stack* stack, int n, FILE* fp);
 
 void readCommands(Stack* stack, FILE* inputFile, FILE* outputFile);
 void dtorStack(Stack* stack);
-void initStack(Stack* stack);
-void push(Stack* stack, int n, FILE* fp);
-void pop(Stack* stack, FILE* fp);
-void back(Stack* stack, FILE* fp);
 void size(Stack* stack, FILE* fp);
 void clear(Stack* stack, FILE* fp);
 
@@ -26,24 +40,21 @@ int main()
     Stack* stack = calloc(1, sizeof(Stack));
     if (stack == NULL)
     {
-        printf("Error of allocation of memory (line - %d)\n", __LINE__);
-        assert(false);
+        return ERROR_OF_ALLOCATING_MEMORY;
     }
 
     FILE* inputFile  = fopen("input.txt", "r");
     if (inputFile == NULL)
     {
-        printf("Error of openning file %s\n", "input.txt");
-        assert(false);
+        return ERROR_OF_ALLOCATING_MEMORY;
     }
     FILE* outputFile = fopen("output.txt", "w");
     if (outputFile == NULL)
     {
-        printf("Error of openning file %s\n", "output.txt");
-        assert(false);
+        return ERROR_OF_ALLOCATING_MEMORY;
     }
 
-    initStack(stack);
+    initStack(stack, MAX_SIZE);
 
     readCommands(stack, inputFile, outputFile);
 
@@ -55,69 +66,89 @@ int main()
 }
 
 
-void initStack(Stack* stack)
+int initStack(Stack* stack, int capacity)
 {
     assert(stack != NULL);
 
-    int* data = calloc(MAX_SIZE, sizeof(int));
+    int* data = calloc(capacity, sizeof(int));
     if (data == NULL)
     {
-        printf("Error of allocation of memory (line - %d)\n", __LINE__);
-        assert(false);
+        return ERROR_OF_ALLOCATING_MEMORY;
     }
-    stack->data = data;
-    stack->size = -1;
+    stack->data     = data;
+    stack->capacity = capacity;
+    stack->size     = -1;
 }
 
-void push(Stack* stack, int n, FILE* fp)
+int push(Stack* stack, int n, FILE* fp)
 {
-    assert(stack != NULL);
+    assert(stack       != NULL);
+    assert(stack->data != NULL);
+
+    if (stack->capacity == stack->size)
+    {
+        StackRealloc(stack, COEFFICIENT_UP);
+    }
 
     stack->size++;
     stack->data[stack->size] = n;
+
     fprintf(fp, "ok\n");
+    return NO_ERROR;
 }
 
-void pop(Stack* stack, FILE* fp)
+int pop(Stack* stack, FILE* fp)
 {
-    assert(stack != NULL);
-    assert(stack->size > 0);
+    assert(stack       != NULL);
+    assert(stack->size  > 0);
+    assert(stack->data != NULL);
 
     if (stack->size == -1)
     {
-        fprintf(fp, "error\n");
+        return ERROR_SIZE;
     }
     else
     {
+        if (stack->size == (int)(BOUNDARY_REALLOC*(double)(stack->capacity)))
+        {
+            StackRealloc(stack, COEFFICIENT_DOWN);
+        }
+
         fprintf(fp, "%d\n", stack->data[stack->size]);
         stack->size--;
+        return NO_ERROR;
     }
 }
 
-void back(Stack* stack, FILE* fp)
+int back(Stack* stack, FILE* fp)
 {
-    assert(stack != NULL);
+    assert(stack       != NULL);
+    assert(stack->data != NULL);
 
     if (stack->size == -1)
     {
         fprintf(fp, "error\n");
+        return ERROR_SIZE;
     }
     else
     {
         fprintf(fp, "%d\n", stack->data[stack->size]);
+        return NO_ERROR;
     }
 }
 
 void size(Stack* stack, FILE* fp)
 {
-    assert(stack != NULL);
+    assert(stack       != NULL);
+    assert(stack->data != NULL);
 
     fprintf(fp, "%d\n", stack->size + 1);
 }
 
 void clear(Stack* stack, FILE* fp)
 {
-    assert(stack != NULL);
+    assert(stack       != NULL);
+    assert(stack->data != NULL);
 
     stack->size = -1;
     fprintf(fp, "ok\n");
@@ -125,9 +156,11 @@ void clear(Stack* stack, FILE* fp)
 
 void readCommands(Stack* stack, FILE* inputFile, FILE* outputFile)
 {
-    assert(stack != NULL);
+    assert(stack       != NULL);
+    assert(stack->data != NULL);
+
     int n = 0;
-    char operation[10];
+    char operation[LINE_LEN];
     while (fscanf(inputFile, "%s", operation) > 0)
     {
         if (strcmp(operation, "push") == 0)
@@ -161,10 +194,27 @@ void readCommands(Stack* stack, FILE* inputFile, FILE* outputFile)
 
 void dtorStack(Stack* stack)
 {
-    assert(stack != NULL);
+    assert(stack       != NULL);
+    assert(stack->data != NULL);
 
     free(stack->data);
     stack->size = -1;
     free(stack);
 }
 
+int StackRealloc(Stack* stk, double coef)
+{
+    assert(stk       != NULL);
+    assert(stk->data != NULL);
+
+    size_t new_size = (int)(coef*(double)((stk->capacity)*sizeof(int)));
+    int* new_data = (int*) realloc(stk->data, new_size);
+    if(new_data == NULL)
+    {
+        return ERROR_OF_ALLOCATING_MEMORY;
+    }
+    stk->data     = new_data;
+    stk->capacity = (int)(coef * (double)stk->capacity);
+
+    return NO_ERROR;
+}

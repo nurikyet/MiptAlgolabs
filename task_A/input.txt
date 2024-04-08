@@ -1,0 +1,10 @@
+push 1
+back
+push 2
+back
+push 3
+back 
+push 4
+back
+exit
+
