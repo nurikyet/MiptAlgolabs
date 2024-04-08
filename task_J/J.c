@@ -6,6 +6,16 @@
 
 #define MAX_LEN 200005
 #define MAX_LEN_OF_LINE 40
+#define MAX_LEVEL 0
+#define MIN_LEVEL 1
+
+enum Status
+{
+    NO_ERROR                   = 0,
+    ERROR_SCANF                = 1,
+    ERROR_OF_ALLOCATING_MEMORY = 2,
+    ERROR_SIZE                 = -1
+};
 
 typedef struct
 {
@@ -14,7 +24,7 @@ typedef struct
     int capacity;
 } Heap;
 
-void ReadCommands(Heap* heap);
+int ExecuteCommands(Heap* heap);
 Heap* HeapCtor(int capacity);
 void HeapDtor(Heap* hp);
 
@@ -22,7 +32,7 @@ int main()
 {
     Heap* heap = HeapCtor(MAX_LEN);
 
-    ReadCommands(heap);
+    ExecuteCommands(heap);
 
     HeapDtor(heap);
     free(heap);
@@ -77,11 +87,11 @@ int GetGrandParent(int index)
 int FindLevel(int element)
 {
     int layer = ceil(log2(element + 2));
-    if(layer % 2 == 1)                    //minimum level
+    if(layer % 2 == 1)                    
     {
-        return 1;
+        return MIN_LEVEL;
     }
-    return 0;                             //maximum level
+    return MAX_LEVEL;                            
 }
 
 int MaxOfThree(Heap* hp, int first, int second, int third)
@@ -95,7 +105,7 @@ int MaxOfThree(Heap* hp, int first, int second, int third)
 
     if (first >= hp->size)
     {
-        return -1;
+        return ERROR_SIZE;
     }
 
     if (second >= hp->size)
@@ -131,7 +141,7 @@ int MinOfThree(Heap* hp, int first, int second, int third)
 
     if (first >= hp->size)
     {
-        return -1;
+        return ERROR_SIZE;
     }
 
     if (second >= hp->size)
@@ -345,6 +355,11 @@ Heap* HeapCtor(int capacity)
     heap->size = 0;
     heap->capacity = capacity;
     heap->arr = (int*)calloc(1, MAX_LEN * sizeof(int));
+    if (heap->arr == NULL)
+    {
+        printf("Error of memory\n");
+        return NULL;
+    }
 
     return heap;
 }
@@ -362,7 +377,7 @@ void SiftUp(Heap* hp, int index)
         parent       = GetParent(index);
         grand_parent = GetGrandParent(index);
 
-        if (FindLevel(index) == 1)                               // уровень минимумов
+        if (FindLevel(index) == MIN_LEVEL)                               // уровень минимумов
         {
             if (hp->arr[index] > hp->arr[parent])
             {
@@ -490,21 +505,30 @@ void HeapInsert(Heap* hp, int data)
 
 }
 
-void ReadCommands(Heap* heap)
+int ExecuteCommands(Heap* heap)
 {
    int number_of_commands = 0;
-    scanf("%d", &number_of_commands);
+    if (scanf("%d", &number_of_commands) <= 0)
+    {
+        return ERROR_SCANF;
+    }
 
     char operation[MAX_LEN_OF_LINE] = {};
 
     for(int i = 0; i < number_of_commands; i++)
     {
-        scanf("%s", &operation);
+        if (scanf("%s", operation) <= 0)
+        {
+            return ERROR_SCANF;
+        }
 
         if (strcmp(operation, "insert") == 0)
         {
             int n = 0;
-            scanf("%d", &n);
+            if (scanf("%d", &n) <= 0)
+            {
+                return ERROR_SCANF;
+            }
             HeapInsert(heap, n);
             printf("ok\n");
         }
@@ -570,4 +594,5 @@ void ReadCommands(Heap* heap)
         }
     }
 
+    return NO_ERROR;
 }
