@@ -92,7 +92,7 @@ int StackTop(stack_t* stk, void* element)
     {
         return ERROR_SIZE;
     }
-    void* value = stk->data + (stk->size - 2)*(stk->element_size);
+    void* value = stk->data + (stk->size - 1)*(stk->element_size);
 
     memcpy(element, value, stk->element_size);
     return NO_ERROR;

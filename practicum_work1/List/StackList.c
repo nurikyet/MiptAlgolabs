@@ -6,8 +6,7 @@ stack_t* StackCtor(size_t element_size)
     if (stk == NULL)
     {
         stk->size = 0;
-        printf("Function %s: not enough memory to allocate", __func__);
-        return NULL;
+        return (stack_t*)ERROR_OF_ALLOCATING_MEMORY;
     }
 
     stk->head         = NULL;
@@ -76,12 +75,6 @@ int StackTop(stack_t* stk, void* element)
 void StackDtor(stack_t* stk)
 {
     assert(stk);
-
-    if (stk->size == 0)
-    {
-        free(stk);
-        return;
-    }
 
     for (int i = 0; i < stk->size; i++)
     {

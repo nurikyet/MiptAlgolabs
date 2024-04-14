@@ -20,12 +20,12 @@
    Стек на массиве 
    \```
    make
-   ./StackArrayRes
+   ./StackArrayRes.exe
    \```
    Стек на односвязном списке
    \```
    make 
-   ./StackListRes
+   ./StackListRes.exe
    \```
 
 ## Тесты и результаты
