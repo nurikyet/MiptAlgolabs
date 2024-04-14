@@ -60,6 +60,8 @@ static const size_t SMALL_TESTS_STEP = 50;
 
 static void TestQuickPivot(const int from, const int to, const int step,
                                 const char* src_path, const char* out_folder);
+
+
 static void TestQuickPartitions(const int from, const int to, const int step,
                                 const char* src_path, const char* out_folder);                                
 
@@ -75,12 +77,3 @@ void GetFourthPointData();
 void GetThirdPointData();
 void GetSecondPointData();
 void GetFirstPointData();
-
-
-
-
-
-
-
-
-
