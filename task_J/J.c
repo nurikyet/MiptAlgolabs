@@ -513,7 +513,11 @@ int ExecuteCommands(Heap* heap)
         return ERROR_SCANF;
     }
 
-    char operation[MAX_LEN_OF_LINE] = {};
+    char* operation = (char*)calloc(MAX_LEN_OF_LINE, sizeof(char));
+    if (operation == NULL)
+    {
+        return ERROR_OF_ALLOCATING_MEMORY;
+    }
 
     for(int i = 0; i < number_of_commands; i++)
     {
