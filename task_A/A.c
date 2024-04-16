@@ -26,12 +26,12 @@ struct Stack
     int capacity;
 };
 
-int StackRealloc(Stack* stk, double coef);
+int reallocStack(Stack* stk, double coef);
 int pop(Stack* stack, FILE* fp);
 int back(Stack* stack, FILE* fp);
 int initStack(Stack* stack, int capacity);
 int push(Stack* stack, int n, FILE* fp);
-int readCommands(Stack* stack, FILE* inputFile, FILE* outputFile);
+int executeCommands(Stack* stack, FILE* inputFile, FILE* outputFile);
 
 void dtorStack(Stack* stack);
 void size(Stack* stack, FILE* fp);
@@ -58,7 +58,7 @@ int main()
 
     initStack(stack, MAX_SIZE); 
 
-    readCommands(stack, inputFile, outputFile); 
+    executeCommands(stack, inputFile, outputFile); 
 
     fclose(inputFile);
     fclose(outputFile);
@@ -90,7 +90,7 @@ int push(Stack* stack, int n, FILE* fp)
 
     if (stack->capacity == stack->size)
     {
-        StackRealloc(stack, COEFFICIENT_UP);
+        reallocStack(stack, COEFFICIENT_UP);
     }
 
     stack->size++;
@@ -114,7 +114,7 @@ int pop(Stack* stack, FILE* fp)
     {
         if (stack->size == (int)(BOUNDARY_REALLOC*(double)(stack->capacity)))
         {
-            if (StackRealloc(stack, COEFFICIENT_DOWN) != NO_ERROR)
+            if (reallocStack(stack, COEFFICIENT_DOWN) != NO_ERROR)
             {
                 return ERROR_OF_ALLOCATING_MEMORY;
             }
@@ -160,7 +160,7 @@ void clear(Stack* stack, FILE* fp)
     fprintf(fp, "ok\n");
 }
 
-int readCommands(Stack* stack, FILE* inputFile, FILE* outputFile)
+int executeCommands(Stack* stack, FILE* inputFile, FILE* outputFile)
 {
     assert(stack       != NULL);
     assert(stack->data != NULL);
@@ -214,7 +214,7 @@ void dtorStack(Stack* stack)
     free(stack);
 }
 
-int StackRealloc(Stack* stk, double coef)
+int reallocStack(Stack* stk, double coef)
 {
     assert(stk       != NULL);
     assert(stk->data != NULL);
