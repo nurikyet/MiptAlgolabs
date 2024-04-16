@@ -349,18 +349,16 @@ Heap* HeapCtor(int capacity)
     Heap* heap = (Heap*)calloc(1, sizeof(Heap));
     if (heap == NULL)
     {
-        printf("Error of memory\n");
-        return NULL;
+        return (Heap*)ERROR_OF_ALLOCATING_MEMORY;
     }
     heap->size = 0;
     heap->capacity = capacity;
-    heap->arr = (int*)calloc(1, MAX_LEN * sizeof(int));
-    if (heap->arr == NULL)
+    int* arr = (int*)calloc(1, MAX_LEN * sizeof(int));
+    if (arr == NULL)
     {
-        printf("Error of memory\n");
-        return NULL;
+        return (Heap*)ERROR_OF_ALLOCATING_MEMORY;
     }
-
+    heap->arr = arr;
     return heap;
 }
 
