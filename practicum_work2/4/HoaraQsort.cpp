@@ -6,17 +6,19 @@
 #include "HoaraQsort.h"
 
 static void Qsort(int* arr, int left, int right);
-static void swap(int* a, int* b);
+static void swap(int* first, int* second);
 
-static void swap(int* a, int* b)
+static void swap(int* first, int* second)
 {
-    int temp = *a;
-    *a = *b;
-    *b = temp;
+    int temp = *first;
+    *first   = *second;
+    *second  = temp;
 }
 
 int HoarPartition(int* arr, int left, int right)
 {
+    assert(arr != NULL);
+
     int piv_idx = left + (right - left) / 2;
     int pivot   = arr[piv_idx];
     int i       = left;
@@ -42,6 +44,8 @@ int HoarPartition(int* arr, int left, int right)
 
 static void Qsort(int* arr, int left, int right)
 {
+    assert(arr != NULL);
+
     if (left < right)
     {
         int piv_idx = HoarPartition(arr, left, right);

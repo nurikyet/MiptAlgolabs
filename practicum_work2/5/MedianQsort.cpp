@@ -6,53 +6,21 @@
 #include "MedianQsort.h"
 
 static void Qsort(int* arr, int left, int right);
-static void swap(int* a, int* b);
+static void swap(int* first, int* second);
 
-static void swap(int* a, int* b)
+static void swap(int* first, int* second)
 {
-    int temp = *a;
-    *a = *b;
-    *b = temp;
+    int temp = *first;
+    *first   = *second;
+    *second  = temp;
 }
 
-int GiveMiddle(int first, int second, int third)
+int HoarPartition(int* arr, int left, int right)
 {
-    if (first < second)
-    {
-        if (second < third)
-        {
-            return second;
-        }
-        else if(first < third)
-        {
-            return third;
-        }
-        else
-        {
-            return first;
-        }
-    }
-    else
-    {
-        if (third < second)
-        {
-            return third;
-        }
-        else if (first < third)
-        {
-            return first;
-        }
-        else
-        {
-            return second;
-        }
-    }
-}
+    assert(arr != NULL);
 
-int MedianHoarPartition(int* arr, int left, int right)
-{
     int piv_idx = left + (right - left) / 2;
-    int pivot   = GiveMiddle(arr[left], arr[piv_idx], arr[right]);
+    int pivot   = arr[piv_idx];
     int i       = left;
     int j       = right;
     while(i <= j)
@@ -76,18 +44,20 @@ int MedianHoarPartition(int* arr, int left, int right)
 
 static void Qsort(int* arr, int left, int right)
 {
+    assert(arr != NULL);
+
     if (left < right)
     {
-        int piv_idx = MedianHoarPartition(arr, left, right);
+        int piv_idx = HoarPartition(arr, left, right);
         Qsort(arr, left, piv_idx);
         Qsort(arr, piv_idx + 1, right);
     }
 }
 
-void MedianQsort(int* arr, size_t size)
+void HoaraQsort(int* arr, size_t size)
 {
     assert(size > 0);
     assert(arr != NULL);
 
-    Qsort(arr, 0, size - 1);
+    Qsort(arr, 0, (int)size - 1);
 }

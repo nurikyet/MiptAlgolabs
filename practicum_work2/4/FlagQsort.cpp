@@ -6,16 +6,19 @@
 #include "FlagQsort.h"
 
 static void Qsort(int* arr, int left, int right);
+static void swap(int* first, int* second);
 
-static void swap(int* a, int* b)
+static void swap(int* first, int* second)
 {
-    int temp = *a;
-    *a = *b;
-    *b = temp;
+    int temp = *first;
+    *first   = *second;
+    *second  = temp;
 }
 
 void FlagPartition(int* arr, int left, int right, int* equals_form, int* equals_to)
 {
+    assert(arr != NULL);
+
     int pivot = arr[left + (right - left) / 2];
     int mid = left;
 
@@ -40,6 +43,8 @@ void FlagPartition(int* arr, int left, int right, int* equals_form, int* equals_
 
 static void Qsort(int* arr, int left, int right)
 {
+    assert(arr != NULL);
+
     if (left < right)
     {
         int equals_from = 0, equals_to = 0;

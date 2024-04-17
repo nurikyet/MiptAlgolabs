@@ -6,17 +6,19 @@
 #include "RandQsort.h"
 
 static void Qsort(int* arr, int left, int right);
-static void swap(int* a, int* b);
+static void swap(int* first, int* second);
 
-static void swap(int* a, int* b)
+static void swap(int* first, int* second)
 {
-    int temp = *a;
-    *a = *b;
-    *b = temp;
+    int temp = *first;
+    *first   = *second;
+    *second  = temp;
 }
 
 int RandQsortHoarPartition(int* arr, int left, int right)
 {
+    assert(arr != NULL);
+
     int pivot   = arr[left + (rand() % (right - left + 1))];
     int i       = left;
     int j       = right;
@@ -41,6 +43,8 @@ int RandQsortHoarPartition(int* arr, int left, int right)
 
 void Qsort(int* arr, int left, int right)
 {
+    assert(arr != NULL);
+
     if (left < right)
     {
         int piv_idx = RandQsortHoarPartition(arr, left, right);

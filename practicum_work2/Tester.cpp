@@ -68,14 +68,13 @@ void GetSixthPointData()
     Tester(BIG_TESTS_FROM, BIG_TESTS_TO, BIG_TESTS_STEP, BIG_TESTS_PATH,
             "results/6_results/intro_shell_sort.out",
             IntroShellSort);
-
 }
 
 void GetEightsPointData()
 {
     Tester(BIG_TESTS_FROM, BIG_TESTS_TO, BIG_TESTS_STEP, BIG_TESTS_PATH,
             "results/8_results/msd_sort.out",
-            RadixSort);
+            MSD);
 
     Tester(BIG_TESTS_FROM, BIG_TESTS_TO, BIG_TESTS_STEP, BIG_TESTS_PATH,
             "results/8_results/lsd_sort.out",
@@ -112,6 +111,9 @@ static void TestQuickPivot(const int from, const int to, const int step,
     char dest_path[MAX_PATH_LEN] = "";
 
     snprintf(dest_path, MAX_PATH_LEN, "%smedian_qsort.out", out_folder);
+    Tester(from, to, step, src_path, dest_path, HoaraQsort);
+
+    snprintf(dest_path, MAX_PATH_LEN, "%smedian3_qsort.out", out_folder);
     Tester(from, to, step, src_path, dest_path, MedianQsort);
 
     snprintf(dest_path, MAX_PATH_LEN, "%smedian3_rand_qsort.out", out_folder);

@@ -6,13 +6,13 @@
 #include "IntroQsort.h"
 
 static void Qsort(int* arr, int left, int right);
-static void swap(int* a, int* b);
+static void swap(int* first, int* second);
 
-static void swap(int* a, int* b)
+static void swap(int* first, int* second)
 {
-    int temp = *a;
-    *a = *b;
-    *b = temp;
+    int temp = *first;
+    *first   = *second;
+    *second  = temp;
 }
 
 int IntroHoarPartition(int* arr, int left, int right)

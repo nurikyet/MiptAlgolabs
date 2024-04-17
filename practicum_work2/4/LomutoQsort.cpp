@@ -6,17 +6,19 @@
 #include "LomutoQsort.h"
 
 static void Qsort(int* arr, int left, int right);
-static void swap(int* a, int* b);
+static void swap(int* first, int* second);
 
-static void swap(int* a, int* b)
+static void swap(int* first, int* second)
 {
-    int temp = *a;
-    *a = *b;
-    *b = temp;
+    int temp = *first;
+    *first   = *second;
+    *second  = temp;
 }
 
 int LomutoPartition(int* arr, int left, int right)
 {
+    assert(arr != NULL);
+
     int pivot = arr[left + (right - left) / 2];
     swap(&arr[right], &arr[left + (right - left) / 2]);
     int i = left;
@@ -33,6 +35,8 @@ int LomutoPartition(int* arr, int left, int right)
 
 static void Qsort(int* arr, int left, int right)
 {
+    assert(arr != NULL);
+
     if (left < right)
     {
         int piv_idx = LomutoPartition(arr, left, right);

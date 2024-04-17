@@ -5,8 +5,12 @@
 #include <time.h>
 #include "MergeRecursive.h"
 
-static void Merge(int* array, int left, int mid, int right);
+#define ERROR 0;
+#define TRUE 1;
+
 static void MergeSort(int* arr, size_t size, int left, int right);
+
+static int Merge(int* array, int left, int mid, int right);
 static int min(int a, int b);
 
 static int min(int a, int b)
@@ -14,12 +18,16 @@ static int min(int a, int b)
     return a < b ? a : b;
 }
 
-static void Merge(int* array, int left, int mid, int right)
+static int Merge(int* array, int left, int mid, int right)
 {
     size_t left_index  = left;
     size_t right_index = mid + 1;
 
     int* sorted_array = (int*) calloc(right - left + 1, sizeof(int));
+    if (sorted_array == NULL)
+    {
+        return ERROR;
+    }
 
     size_t index = 0;
 
@@ -51,6 +59,7 @@ static void Merge(int* array, int left, int mid, int right)
     }
 
     free(sorted_array);
+    return TRUE;
 }
 
 

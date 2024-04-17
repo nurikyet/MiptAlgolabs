@@ -8,12 +8,27 @@
 #define MAX 255
 #define SHIFT 8
 
-void RadixSortMSD(int *arr, int *result, int n, int shift) 
-{
-    int count[MAX+1]    = {0};
-    int pref_cnt[MAX+1] = {0};
+#define ERROR -1
+#define TRUE 1
 
-    for (int i = 0; i < n; ++i) 
+int RadixSortMSD(int *arr, int *result, int size, int shift) 
+{
+    assert(arr    != NULL);
+    assert(result != NULL);
+
+    int* count    = (int*)calloc(MAX + 1, sizeof(int));
+    if(count == NULL)
+    {
+        return ERROR;
+    }
+
+    int* pref_cnt = (int*)calloc(MAX + 1, sizeof(int));
+    if(pref_cnt == NULL)
+    {
+        return ERROR;
+    }
+
+    for (int i = 0; i < size; ++i) 
     {
         count[(arr[i] >> shift) & 0xFF]++;
     }
@@ -24,7 +39,7 @@ void RadixSortMSD(int *arr, int *result, int n, int shift)
         pref_cnt[i] = pref_cnt[i-1] + count[i-1];
     }
 
-    for (int i = 0; i < n; ++i) 
+    for (int i = 0; i < size; ++i) 
     {
         result[pref_cnt[(arr[i] >> shift) & 0xFF]++] = arr[i];
     }
@@ -39,11 +54,20 @@ void RadixSortMSD(int *arr, int *result, int n, int shift)
             }
         }
     }
+
+    return TRUE;
 }
 
 void MSD(int* arr, size_t size) 
 {
+    assert(arr != NULL);
+
     int* result = (int*)malloc(size * sizeof(int));
+    if (result == NULL)
+    {
+        return;
+    }
+
     RadixSortMSD(arr, result, size, sizeof(int) * 8);
     
     for (size_t i = 0; i < size; ++i) 

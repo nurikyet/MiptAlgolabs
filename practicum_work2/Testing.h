@@ -10,13 +10,13 @@
 #include "8/LSD.h"
 
 #include "6/IntroShellSort.h"
-#include "6/IntroShelllSort.h"
 #include "6/IntroQsort.h"
 
 #include "5/MedianQsort.h"
 #include "5/Median3RandQsort.h"
 #include "5/RandQsort.h"
-#include "5/RandMedianQsort.h"
+#include "5/MedianOfMedianQsort.h"
+#include "5/Median3Qsort.h"
 
 #include "4/FlagQsort.h"
 #include "4/HoaraQsort.h"

@@ -7,20 +7,20 @@
 
 #define MAX 256
 
-static void swap(int* a, int* b);
+static void swap(int* first, int* second);
 
-static void swap(int* a, int* b)
+static void swap(int* first, int* second)
 {
-    int temp = *a;
-    *a = *b;
-    *b = temp;
+    int temp = *first;
+    *first   = *second;
+    *second  = temp;
 }
 
 void LSD(int* arr, size_t size)
 {
     int* temp = (int*) malloc(sizeof(int) * size);
-    if (temp == NULL) {
-        printf("Error: I can't allocate memory. - %d\n", __LINE__);
+    if (temp == NULL) 
+    {
         return;
     }
 

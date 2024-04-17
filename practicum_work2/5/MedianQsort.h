@@ -1,4 +1,3 @@
-int GiveMiddle(int first, int second, int third);
-int MedianHoarPartition(int* arr, int left, int right);
+void HoaraQsort(int* arr, size_t size);
 
-void MedianQsort(int* arr, size_t size);
+int HoarPartition(int* arr, int left, int right);

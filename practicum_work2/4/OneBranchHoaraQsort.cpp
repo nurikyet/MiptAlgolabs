@@ -3,20 +3,23 @@
 #include <assert.h>
 #include <string.h>
 #include <time.h>
+
 #include "OneBranchHoaraQsort.h"
 
 static void Qsort(int* arr, int left, int right);
-static void swap(int* a, int* b);
+static void swap(int* first, int* second);
 
-static void swap(int* a, int* b)
+static void swap(int* first, int* second)
 {
-    int temp = *a;
-    *a = *b;
-    *b = temp;
+    int temp = *first;
+    *first   = *second;
+    *second  = temp;
 }
 
 int OneBranchHoarPartition(int* arr, int left, int right)
 {
+    assert(arr != NULL);
+
     int piv_idx = left + (right - left) / 2;
     int pivot   = arr[piv_idx];
     int i       = left;
@@ -42,6 +45,8 @@ int OneBranchHoarPartition(int* arr, int left, int right)
 
 static void Qsort(int* arr, int left, int right)
 {
+    assert(arr != NULL);
+
     while (left < right)
     {
         int piv_idx = OneBranchHoarPartition(arr, left, right);

@@ -4,19 +4,26 @@
 #include <string.h>
 #include <time.h>
 #include "MergeIterativeSort.h"
- 
-static void Merge(int* arr, int left, int mid, int right);
+
+#define ERROR 0;
+#define TRUE 1;
+
+static int Merge(int* arr, int left, int mid, int right);
 
 int min(int a, int b)
 {
     return a < b ? a : b;
 }
 
-static void Merge(int* arr, int left, int mid, int right)
+static int Merge(int* arr, int left, int mid, int right)
 {
     int it1     = 0;
     int it2     = 0;
     int* result = (int*)calloc(right - left + 1, sizeof(int));
+    if(result == NULL)
+    {
+        return ERROR;
+    }
 
     while (left + it1 < mid && mid + it2 < right)
     {
@@ -49,6 +56,7 @@ static void Merge(int* arr, int left, int mid, int right)
         arr[left + i] = result[i];
     }
     free(result);
+    return TRUE;
 }
 void MergeSortIterative(int* arr, size_t size)
 {

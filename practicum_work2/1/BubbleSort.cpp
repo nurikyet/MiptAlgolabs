@@ -5,8 +5,17 @@
 #include <time.h>
 #include "BubbleSort.h"
 
+static void swap(int* first, int* second)
+{
+    int* temp = first;
+    first     = second;
+    second    = temp;
+}
+
 void BubbleSort(int* arr, size_t size)
 {
+    assert(arr != NULL);
+
     size_t i = 0, j = 0;
     int temp = 0;
     for(i = 0; i < size - 1; i++)
@@ -15,9 +24,7 @@ void BubbleSort(int* arr, size_t size)
         {
             if (arr[j] > arr[j + 1])
             {
-                temp       = arr[j];
-                arr[j]     = arr[j + 1];
-                arr[j + 1] = temp;
+                swap(&arr[j], &arr[j + 1]);
             }
         }
     }

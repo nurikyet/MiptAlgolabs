@@ -5,14 +5,17 @@
 #include <time.h>
 #include "RandMedianQsort.h"
 
-static void Qsort(int* arr, int left, int right);
-static void swap(int* a, int* b);
+#define ERROR -1;
+#define TRUE 1;
 
-static void swap(int* a, int* b)
+static void Qsort(int* arr, int left, int right);
+static void swap(int* first, int* second);
+
+static void swap(int* first, int* second)
 {
-    int temp = *a;
-    *a = *b;
-    *b = temp;
+    int temp = *first;
+    *first   = *second;
+    *second  = temp;
 }
 
 int FindMedian(int* arr, int left, int right)
@@ -21,6 +24,10 @@ int FindMedian(int* arr, int left, int right)
     int i, medianIndex = 0;
     int numMedians = (n + 4) / 5;
     int* medians = (int*)malloc(numMedians * sizeof(int));
+    if (medians == NULL)
+    {
+        return ERROR;
+    }
 
     for(i = 0; i < n / 5; i++)
     {

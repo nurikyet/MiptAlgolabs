@@ -7,6 +7,8 @@
 
 void ShellSort(int* arr, size_t size)
 {
+    assert(arr != NULL);
+
     int step = 1;
     while(step <= size / 9)
     {
