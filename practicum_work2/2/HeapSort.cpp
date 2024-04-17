@@ -29,15 +29,22 @@ int GetParent(int index, int k)
     return (index - 1) / k;
 }
 
+int GetChild(int index, int k, int i)
+{
+    return index * k + i;
+}
+
 int GetMax(Heap* hp, int index)
 {
+    assert(hp != NULL);
+ 
     int max_index = index;
     int max_value = INT_MIN;
     int k         = hp->children;
 
     for (int i = 1; i < k + 1; i++)
     {
-        int child = index * k + i;
+        int child = GetChild(index, k, i);
         if (child < hp->size && hp->arr[child] > max_value)
         {
             max_index = child;
@@ -50,6 +57,8 @@ int GetMax(Heap* hp, int index)
 
 void SiftDown(Heap* hp, int index)
 {
+    assert(hp != NULL);
+
     if (index >= hp->size) return;
     int k = hp->children;
     while(index * k + 1 < hp->size)
@@ -69,7 +78,8 @@ void SiftDown(Heap* hp, int index)
 
 void SiftUp(Heap* hp, int index)
 {
-    assert(hp);
+    assert(hp != NULL);
+
     int parent       = 0;
     int grand_parent = 0;
 
@@ -87,20 +97,24 @@ void SiftUp(Heap* hp, int index)
     }
 }
 
-int ExtractMax(Heap* h)
+int ExtractMax(Heap* hp)
 {
-    int root  = h->arr[0];
+    assert(hp != NULL);
 
-    h->arr[0] = h->arr[h->size - 1];
-    h->size--;
+    int root  = hp->arr[0];
 
-    SiftDown(h, 0);
+    hp->arr[0] = hp->arr[hp->size - 1];
+    hp->size--;
+
+    SiftDown(hp, 0);
 
     return root;
 }
 
 void HeapInsert(Heap* hp, int data)
 {
+    assert(hp != NULL);
+
     if (hp->size >= hp->capacity) return;
 
     hp->arr[hp->size] = data;
@@ -111,15 +125,19 @@ void HeapInsert(Heap* hp, int data)
 
 }
 
-void HeapDtor(Heap* h)
+void HeapDtor(Heap* hp)
 {
-    free(h->arr);
-    h->size = 0;
-    h->capacity = 0;
+    assert(hp != NULL);
+
+    free(hp->arr);
+    hp->size     = 0;
+    hp->capacity = 0;
 }
 
 void HeapSort(Heap* hp)
 {
+    assert(hp != NULL);
+
     int n = hp->capacity;
     for (int i = 0; i < n - 1; i++)
     {
@@ -131,28 +149,38 @@ void HeapSort(Heap* hp)
 
 Heap* HeapCtor(FILE* file, int capacity, int k)
 {
-    Heap* h     = (Heap*)calloc(1, sizeof(Heap));
-    if (h == NULL)
+    Heap* heap     = (Heap*)calloc(1, sizeof(Heap));
+    if (heap == NULL)
     {
-        printf("Error of memory\n");
+        return;
+    }
+    heap->size     = 0;
+    heap->capacity = capacity;
+    heap->children = k;
+
+    int* arr      = (int*)calloc(1, (capacity  + 5)* sizeof(int));
+    if (arr == NULL)
+    {
         return NULL;
     }
-    h->size     = 0;
-    h->capacity = capacity;
-    h->children = k;
-    h->arr      = (int*)calloc(1, (capacity  + 5)* sizeof(int));
+    heap->arr = arr;
 
     for(int i = 0; i < capacity; i++)
     {
         int data = 0;
-        fscanf(file, "%d", &data);
-        HeapInsert(h, data);
+        if (fscanf(file, "%d", &data) <= 0)
+        {
+            return NULL;
+        }
+        HeapInsert(heap, data);
     }
-    return h;
+    return heap;
 }
 
 void HeapGiveTime(FILE* file, Heap* hp, int size)
 {
+    assert(hp != NULL);
+
     if (size == 0) return;
 
     double time_spent = 0.0;
@@ -168,9 +196,14 @@ void HeapGiveTime(FILE* file, Heap* hp, int size)
 
 void HeapArrCtor(FILE* file, int* arr, int size)
 {
+    assert(arr != NULL);
+
     for (int i = 0; i < size; i++)
     {
-        fscanf(file, "%d", &arr[i]);        
+        if (fscanf(file, "%d", &arr[i]) <= 0)
+        {
+            return;
+        }        
     }
 }
 
@@ -189,6 +222,11 @@ void HeapTesting(int children_num, const char* res_name, FILE* file_in, FILE* fi
     HeapGiveTime(file_res, hp, size);
 
     int* res = (int*)calloc(size + 1, sizeof(int));
+    if (res == NULL)
+    {
+        return;
+    }
+
     HeapArrCtor(file_out, res, size);
 
     for (int i = 0; i < size; i++)
