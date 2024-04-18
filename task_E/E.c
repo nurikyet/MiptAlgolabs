@@ -14,6 +14,14 @@ typedef struct Node
 
 #define max(a, b) (((a) > (b)) ? (a) : (b))
 
+enum Status
+{
+    NO_ERROR                   = 0,
+    ERROR_SCANF                = -1,
+    ERROR_OF_ALLOCATING_MEMORY = -2,
+    ERROR_UNKNOWN_COMMAND      = -3 
+};
+
 int GiveHeight(Node* node) 
 {
     if (node == NULL) 
@@ -37,6 +45,11 @@ int GetBalance(Node* node)
 Node* NewNode(int data) 
 {
     Node* node = (Node*)calloc(1, sizeof(Node));
+    if (node == NULL)
+    {
+        return (Node*)ERROR_OF_ALLOCATING_MEMORY;
+    }
+
     node->data = data;
     node->left = NULL;
     node->right = NULL;
@@ -157,18 +170,24 @@ int FindNext(Node* root, int time)
 
 int main() 
 {
-    int n;
-    scanf("%d", &n);
+    int number_of_commands = 0;
+    if (scanf("%d", &number_of_commands) != 1)
+    {
+        return ERROR_SCANF;
+    }
 
     Node* root = NULL;
 
     int last_add = 0; 
 
-    for (int i = 0; i < n; i++) 
+    for (int i = 0; i < number_of_commands; i++) 
     {
         char operation;
-        int data;
-        scanf(" %c %d", &operation, &data);
+        int data = 0;
+        if (scanf(" %c %d", &operation, &data) != 2)
+        {
+            return ERROR_SCANF;
+        }
 
         if (operation == '+') 
         {
@@ -182,7 +201,10 @@ int main()
             printf("%d\n", result);
             last_add = result; 
         }
-
+        else 
+        {
+            return ERROR_UNKNOWN_COMMAND;
+        }
     }
 
     return 0;
