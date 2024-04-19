@@ -4,21 +4,13 @@
 #include <string.h>
 #include <time.h>
 #include "LSD.h"
+#include "../Common.h"
 
 #define MAX 256
 
-static void swap(int* first, int* second);
-
-static void swap(int* first, int* second)
-{
-    int temp = *first;
-    *first   = *second;
-    *second  = temp;
-}
-
 void LSD(int* arr, size_t size)
 {
-    int* temp = (int*) malloc(sizeof(int) * size);
+    int* temp = (int*)calloc(size, sizeof(int));
     if (temp == NULL) 
     {
         return;

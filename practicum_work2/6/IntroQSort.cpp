@@ -4,16 +4,9 @@
 #include <string.h>
 #include <time.h>
 #include "IntroQsort.h"
+#include "../Common.h"
 
 static void Qsort(int* arr, int left, int right);
-static void swap(int* first, int* second);
-
-static void swap(int* first, int* second)
-{
-    int temp = *first;
-    *first   = *second;
-    *second  = temp;
-}
 
 int IntroHoarPartition(int* arr, int left, int right)
 {
@@ -35,7 +28,7 @@ int IntroHoarPartition(int* arr, int left, int right)
         {
             return j;
         }
-        swap(&arr[i++], &arr[j--]);
+        swap(&arr[i++], &arr[j--], sizeof(int));
     }
     return j;
 }

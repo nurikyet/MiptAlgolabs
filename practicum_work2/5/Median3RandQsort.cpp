@@ -4,52 +4,28 @@
 #include <string.h>
 #include <time.h>
 #include "Median3RandQsort.h"
+#include "../Common.h"
 
 static void Qsort(int* arr, int left, int right);
-static void swap(int* first, int* second);
 
-static void swap(int* first, int* second)
+int GetMedian(int first, int second, int third) 
 {
-    int temp = *first;
-    *first   = *second;
-    *second  = temp;
-}
-
-int GetMedian(int first, int second, int third)
-{
-    if (first < second)
+    if (first < second && second < third) 
     {
-        if (second < third)
-        {
-            return second;
-        }
-        else if(first < third)
-        {
-            return third;
-        }
-        else
-        {
-            return first;
-        }
+        return second;
     }
-    else
+    else if (second < first && first < third) 
     {
-        if (third < second)
-        {
-            return third;
-        }
-        else if (first < third)
-        {
-            return first;
-        }
-        else
-        {
-            return second;
-        }
+        return first;
+    }
+    else 
+    {
+        return third;
     }
 }
 
-int HoarPartitionForMedian(int* arr, int left, int right)
+
+static int Partition(int* arr, int left, int right)
 {
     assert(arr != NULL);
 
@@ -72,7 +48,7 @@ int HoarPartitionForMedian(int* arr, int left, int right)
         {
             return j;
         }
-        swap(&arr[i++], &arr[j--]);
+        swap(&arr[i++], &arr[j--], sizeof(int));
     }
     return j;
 }
@@ -83,7 +59,7 @@ void Qsort(int* arr, int left, int right)
 
     if (left < right)
     {
-        int piv_idx = HoarPartitionForMedian(arr, left, right);
+        int piv_idx = Partition(arr, left, right);
         Qsort(arr, left, piv_idx);
         Qsort(arr, piv_idx + 1, right);
     }

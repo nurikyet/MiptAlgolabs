@@ -3,20 +3,13 @@
 #include <assert.h>
 #include <string.h>
 #include <time.h>
+#include "../Common.h"
 
 #include "OneBranchHoaraQsort.h"
 
 static void Qsort(int* arr, int left, int right);
-static void swap(int* first, int* second);
 
-static void swap(int* first, int* second)
-{
-    int temp = *first;
-    *first   = *second;
-    *second  = temp;
-}
-
-int OneBranchHoarPartition(int* arr, int left, int right)
+static int Partition(int* arr, int left, int right)
 {
     assert(arr != NULL);
 
@@ -38,7 +31,7 @@ int OneBranchHoarPartition(int* arr, int left, int right)
         {
             return j;
         }
-        swap(&arr[i++], &arr[j--]);
+        swap(&arr[i++], &arr[j--], sizeof(int));
     }
     return j;
 }
@@ -49,7 +42,7 @@ static void Qsort(int* arr, int left, int right)
 
     while (left < right)
     {
-        int piv_idx = OneBranchHoarPartition(arr, left, right);
+        int piv_idx = Partition(arr, left, right);
 
         if (piv_idx - left < right - piv_idx)
         {

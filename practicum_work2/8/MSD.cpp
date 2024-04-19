@@ -62,7 +62,7 @@ void MSD(int* arr, size_t size)
 {
     assert(arr != NULL);
 
-    int* result = (int*)malloc(size * sizeof(int));
+    int* result = (int*)calloc(size, sizeof(int));
     if (result == NULL)
     {
         return;

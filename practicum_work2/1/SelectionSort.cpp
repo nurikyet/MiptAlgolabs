@@ -5,13 +5,7 @@
 #include <limits.h>
 #include <time.h>
 #include "SelectionSort.h"
-
-static void swap(int* first, int* second)
-{
-    int* temp = first;
-    first     = second;
-    second    = temp;
-}
+#include "../Common.h"
 
 void SelectionSort(int* arr, size_t size)
 {
@@ -33,6 +27,6 @@ void SelectionSort(int* arr, size_t size)
         {
             continue;
         }
-        swap(&arr[i], &arr[min]);
+        swap(&arr[i], &arr[min], sizeof(int));
     }
 }

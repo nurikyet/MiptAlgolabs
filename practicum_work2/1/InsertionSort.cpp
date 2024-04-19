@@ -4,23 +4,15 @@
 #include <string.h>
 #include <time.h>
 #include "InsertionSort.h"
+#include "../Common.h"
 
 #define GET_CMP(a, b) ((a) > (b))
-
-static void swap(int* first, int* second)
-{
-    int* temp = first;
-    first     = second;
-    second    = temp;
-}
 
 void InsertionSort(int* arr, size_t size)
 {
     assert(arr != NULL);
 
-    int temp = 0;
-    size_t i = 0, j = 0;
-    for(i = 1; i < size; i++)
+    for(size_t i = 1, j = 0; i < size; i++)
     {
         if (GET_CMP(arr[i - 1], arr[i]))
         {
@@ -28,7 +20,7 @@ void InsertionSort(int* arr, size_t size)
         }
         while(GET_CMP(arr[j - 1], arr[j]) && j > 0)
         {
-            swap(&arr[j - 1], &arr[j]);
+            swap(&arr[j - 1], &arr[j], sizeof(int));
             j--;
         }
     }

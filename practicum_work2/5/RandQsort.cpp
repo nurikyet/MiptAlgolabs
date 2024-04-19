@@ -4,18 +4,11 @@
 #include <string.h>
 #include <time.h>
 #include "RandQsort.h"
+#include "../Common.h"
 
 static void Qsort(int* arr, int left, int right);
-static void swap(int* first, int* second);
 
-static void swap(int* first, int* second)
-{
-    int temp = *first;
-    *first   = *second;
-    *second  = temp;
-}
-
-int RandQsortHoarPartition(int* arr, int left, int right)
+static int Partition(int* arr, int left, int right)
 {
     assert(arr != NULL);
 
@@ -36,7 +29,7 @@ int RandQsortHoarPartition(int* arr, int left, int right)
         {
             return j;
         }
-        swap(&arr[i++], &arr[j--]);
+        swap(&arr[i++], &arr[j--], sizeof(int));
     }
     return j;
 }
@@ -47,7 +40,7 @@ void Qsort(int* arr, int left, int right)
 
     if (left < right)
     {
-        int piv_idx = RandQsortHoarPartition(arr, left, right);
+        int piv_idx = Partition(arr, left, right);
         Qsort(arr, left, piv_idx);
         Qsort(arr, piv_idx + 1, right);
     }

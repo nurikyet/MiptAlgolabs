@@ -31,6 +31,10 @@ int main(int argc, char *argv[])
 
     int n = 0;
     int* array = (int*)calloc(MAX_LEN, sizeof(int));
+    if (array == NULL)
+    {
+        return;
+    }
 
     while (fscanf(file_in, "%d", &array[n]) == 1)
     {

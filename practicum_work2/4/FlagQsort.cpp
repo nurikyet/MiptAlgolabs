@@ -4,18 +4,11 @@
 #include <string.h>
 #include <time.h>
 #include "FlagQsort.h"
+#include "../Common.h"
 
 static void Qsort(int* arr, int left, int right);
-static void swap(int* first, int* second);
 
-static void swap(int* first, int* second)
-{
-    int temp = *first;
-    *first   = *second;
-    *second  = temp;
-}
-
-void FlagPartition(int* arr, int left, int right, int* equals_form, int* equals_to)
+static void Partition(int* arr, int left, int right, int* equals_form, int* equals_to)
 {
     assert(arr != NULL);
 
@@ -26,7 +19,7 @@ void FlagPartition(int* arr, int left, int right, int* equals_form, int* equals_
     {
         if (arr[mid] < pivot)
         {
-            swap(&arr[left++], &arr[mid++]);
+            swap(&arr[left++], &arr[mid++], sizeof(int));
         }
         else if(arr[mid] == pivot)
         {
@@ -34,7 +27,7 @@ void FlagPartition(int* arr, int left, int right, int* equals_form, int* equals_
         }
         else
         {
-            swap(&arr[mid], &arr[right--]);
+            swap(&arr[mid], &arr[right--], sizeof(int));
         }
     }
     *equals_form = left;
@@ -48,7 +41,7 @@ static void Qsort(int* arr, int left, int right)
     if (left < right)
     {
         int equals_from = 0, equals_to = 0;
-        FlagPartition(arr, left, right, &equals_from, &equals_to);
+        Partition(arr, left, right, &equals_from, &equals_to);
         Qsort(arr, left, equals_from - 1);
         Qsort(arr, equals_to + 1, right);
     }

@@ -14,7 +14,7 @@ void GetFirstPointData()
             "results/1_results/selection_sort.out", SelectionSort);
 
     Tester(SMALL_TESTS_FROM, SMALL_TESTS_TO, SMALL_TESTS_STEP, SMALL_TESTS_PATH,
-                     "results/1_results/shell_sort.out", ShellSort);
+            "results/1_results/shell_sort.out", ShellSort);
 }
 
 void GetSecondPointData()
