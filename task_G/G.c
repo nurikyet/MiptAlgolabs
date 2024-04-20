@@ -2,11 +2,9 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
+#include <stdbool.h>
 
 #define LINE_LEN 30
-
-#define TRUE 1
-#define FALSE 0
 
 #define ABOBA printf("%s - %d\n", __func__, __LINE__);
 
@@ -26,7 +24,8 @@ enum Status
     NO_ERROR                   = 0,
     ERROR_KTH                  = -1,
     ERROR_OF_ALLOCATING_MEMORY = -2,
-    ERROR_UNKNOWN_COMMAND      = -3 
+    ERROR_UNKNOWN_COMMAND      = -3,
+    ERROR_FILE                 = -4
 };
 
 Node* NodeDelete(Node* root, int key);
@@ -339,7 +338,7 @@ int TreeKTH(Node* root, int k)
     {
         return ERROR_KTH;
     }
-    int size = GiveSize(root);
+    int size      = GiveSize(root);
     int size_left = GiveSize(root->left);
     
     if (k >= size)
@@ -359,13 +358,13 @@ int TreeKTH(Node* root, int k)
     return TreeKTH(root->right, k - size_left - 1);
 }
 
-int NodeExists(Node* root, int key)
+bool NodeExists(Node* root, int key)
 {    
     while (root != NULL)
     {
         if (key == root->key)
         {
-            return TRUE;
+            return true;
         }
         else if (key > root->key)
         {
@@ -376,7 +375,7 @@ int NodeExists(Node* root, int key)
             root = root->left;
         }
     }
-    return FALSE;
+    return false;
 }
 
 Node* NodePrev(Node* root, int key)
@@ -402,7 +401,7 @@ Node* NodePrev(Node* root, int key)
     return prev_node;
 }
 
-int ExecuteCommands(Node** root_ptr)
+int ExecuteCommands(FILE* file_in, Node** root_ptr)
 {
     char* operation = (char*)calloc(LINE_LEN, sizeof(char));
     if (operation   == NULL)
@@ -413,7 +412,7 @@ int ExecuteCommands(Node** root_ptr)
 
     Node* root = *root_ptr;
 
-    while(scanf("%s %d", operation, &value) == 2)
+    while(fscanf(file_in, "%30s %d", operation, &value) == 2)
     {
         if (strcmp(operation, "insert")    == 0)
         {
@@ -506,7 +505,14 @@ void RootDelete(Node* root)
 int main()
 {
     Node* root = NULL;
-    ExecuteCommands(&root);
+    FILE* file_in = fopen("input.txt", "r");
+    if(file_in == NULL)
+    {
+        return ERROR_FILE;
+    }
+
+    ExecuteCommands(file_in, &root);
     RootDelete(root); 
+    fclose(file_in);
     return 0;
 }
