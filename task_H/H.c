@@ -12,8 +12,8 @@ enum Status
 };
 
 void quickSort(int* array, int low, int high);
+void printNumbers(int* array, int number_of_elements);
 int readNumbers(int* array, int number_of_elements);
-int printNumbers(int* array, int number_of_elements);
 
 int main()
 {
@@ -96,7 +96,7 @@ int readNumbers(int* array, int number_of_elements)
     return NO_ERROR;
 }
 
-int printNumbers(int* array, int number_of_elements)
+void printNumbers(int* array, int number_of_elements)
 {
     for (int i = 0; i < number_of_elements; i++)
     {
