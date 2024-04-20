@@ -12,6 +12,8 @@ enum Status
 };
 
 void quickSort(int* array, int low, int high);
+int readNumbers(int* array, int number_of_elements);
+int printNumbers(int* array, int number_of_elements);
 
 int main()
 {
@@ -30,20 +32,14 @@ int main()
     {
         return ERROR_OF_ALLOCATING_MEMORY;
     }
-    for (int i = 0; i < number_of_elements; i++)
+    if (readNumbers(array, number_of_elements) != NO_ERROR)
     {
-        if (scanf("%d", &array[i]) <= 0)
-        {
-            return ERROR_OF_SCANF;
-        }
+        return ERROR_OF_SCANF;
     }
 
     quickSort(array, 0, number_of_elements - 1);
 
-    for (int i = 0; i < number_of_elements; i++)
-    {
-        printf("%d ", array[i]);
-    }
+    printNumbers(array, number_of_elements);
 
     return 0;
 }
@@ -85,5 +81,25 @@ void quickSort(int* array, int low, int high)
 
         quickSort(array, low, j);
         quickSort(array, i, high);
+    }
+}
+
+int readNumbers(int* array, int number_of_elements)
+{
+    for (int i = 0; i < number_of_elements; i++)
+    {
+        if (scanf("%d", &array[i]) <= 0)
+        {
+            return ERROR_OF_SCANF;
+        }
+    } 
+    return NO_ERROR;
+}
+
+int printNumbers(int* array, int number_of_elements)
+{
+    for (int i = 0; i < number_of_elements; i++)
+    {
+        printf("%d ", array[i]);
     }
 }
