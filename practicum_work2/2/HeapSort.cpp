@@ -240,8 +240,8 @@ void HeapTester(const int from, const int to, const int step,
     {        
         for (int j = 0; j < NUMBER_K; j++)
         {
-            char file1[256];
-            char file2[256];
+            char file1[UCHAR_MAX];
+            char file2[UCHAR_MAX];
 
             sprintf(file1, "%s%d_%d.in", src_path, i, j);
             sprintf(file2, "%s%d_%d.out", src_path, i, j);

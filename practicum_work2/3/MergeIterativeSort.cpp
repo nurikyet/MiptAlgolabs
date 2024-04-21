@@ -60,9 +60,9 @@ static int Merge(int* arr, int left, int mid, int right)
 }
 void MergeSortIterative(int* arr, size_t size)
 {
-    for(int i = 1; i < (int)size; i *= 2)
+    for(size_t i = 1; i < size; i *= 2)
     {
-        for (int j = 0; j < (int)size - i; j += 2 * i)
+        for (size_t j = 0; j < size - i; j += 2 * i)
         {
             Merge(arr, j, j + i, min(j + 2 * i, (int)size));
         }

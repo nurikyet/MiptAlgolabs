@@ -8,9 +8,9 @@
 #define ERROR 0;
 #define TRUE 1;
 
-static void MergeSort(int* arr, size_t size, int left, int right);
+static void MergeSort(int* arr, size_t size, size_t left, size_t right);
 
-static int Merge(int* array, int left, int mid, int right);
+static int Merge(int* array, size_t left, size_t mid, size_t right);
 static int min(int a, int b);
 
 static int min(int a, int b)
@@ -18,7 +18,7 @@ static int min(int a, int b)
     return a < b ? a : b;
 }
 
-static int Merge(int* array, int left, int mid, int right)
+static int Merge(int* array, size_t left, size_t mid, size_t right)
 {
     size_t left_index  = left;
     size_t right_index = mid + 1;
@@ -31,7 +31,7 @@ static int Merge(int* array, int left, int mid, int right)
 
     size_t index = 0;
 
-    while ((int)left_index <= mid && (int)right_index <= right)
+    while (left_index <= mid && right_index <= right)
     {
         if (array[left_index] < array[right_index])
         {
@@ -43,12 +43,12 @@ static int Merge(int* array, int left, int mid, int right)
         }
     }
 
-    while ((int)left_index <= mid)
+    while (left_index <= mid)
     {
         sorted_array[index++] = array[left_index++];
     }
 
-    while ((int)right_index <= right)
+    while (right_index <= right)
     {   
         sorted_array[index++] = array[right_index++];
     }
@@ -63,14 +63,14 @@ static int Merge(int* array, int left, int mid, int right)
 }
 
 
-void MergeSort(int* arr, size_t size, int left, int right)
+void MergeSort(int* arr, size_t size, size_t left, size_t right)
 {
     if (left == right)
     {
         return;
     }
 
-    int mid = (right - left) / 2 + left;
+    size_t mid = (right - left) / 2 + left;
     MergeSort(arr, size, left, mid);
     MergeSort(arr, size, 1 + mid, right);
     Merge(arr, left, mid, right);
@@ -79,5 +79,6 @@ void MergeSort(int* arr, size_t size, int left, int right)
 void MergeSortRecursive(int* arr, size_t size)
 {
     assert(arr != NULL);
-    MergeSort(arr, size, 0, (int)size - 1);
+
+    MergeSort(arr, size, (size_t)0, size - 1);
 }

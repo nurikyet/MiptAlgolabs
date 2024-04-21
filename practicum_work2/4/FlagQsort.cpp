@@ -6,14 +6,14 @@
 #include "FlagQsort.h"
 #include "../Common.h"
 
-static void Qsort(int* arr, int left, int right);
+static void Qsort(int* arr, size_t left, size_t right);
 
-static void Partition(int* arr, int left, int right, int* equals_form, int* equals_to)
+static void Partition(int* arr, size_t left, size_t right, size_t* equals_form, size_t* equals_to)
 {
     assert(arr != NULL);
 
     int pivot = arr[left + (right - left) / 2];
-    int mid = left;
+    size_t mid = left;
 
     while(mid <= right)
     {
@@ -34,13 +34,13 @@ static void Partition(int* arr, int left, int right, int* equals_form, int* equa
     *equals_to   = right;
 }
 
-static void Qsort(int* arr, int left, int right)
+static void Qsort(int* arr, size_t left, size_t right)
 {
     assert(arr != NULL);
 
     if (left < right)
     {
-        int equals_from = 0, equals_to = 0;
+        size_t equals_from = 0, equals_to = 0;
         Partition(arr, left, right, &equals_from, &equals_to);
         Qsort(arr, left, equals_from - 1);
         Qsort(arr, equals_to + 1, right);
@@ -52,5 +52,5 @@ void FlagQsort(int* arr, size_t size)
     assert(size > 0);
     assert(arr != NULL);
 
-    Qsort(arr, 0, (int)size - 1);
+    Qsort(arr, (size_t)0, size - 1);
 }
