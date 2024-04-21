@@ -3,6 +3,8 @@
 #include <stdbool.h>
 #include <assert.h>
 
+#define MOD 1000000000
+
 typedef struct Node
 {
     int data;
@@ -168,18 +170,9 @@ int FindNext(Node* root, int time)
     }
 }
 
-int main() 
+int ExecuteCommands(Node* root, int number_of_commands)
 {
-    int number_of_commands = 0;
-    if (scanf("%d", &number_of_commands) != 1)
-    {
-        return ERROR_SCANF;
-    }
-
-    Node* root = NULL;
-
     int last_add = 0; 
-
     for (int i = 0; i < number_of_commands; i++) 
     {
         char operation;
@@ -191,7 +184,7 @@ int main()
 
         if (operation == '+') 
         {
-            data = (data + last_add) % 1000000000; 
+            data = (data + last_add) % MOD; 
             root = AVLInsert(root, data);
             last_add = 0; 
         } 
@@ -206,6 +199,19 @@ int main()
             return ERROR_UNKNOWN_COMMAND;
         }
     }
+}
+
+int main() 
+{
+    int number_of_commands = 0;
+    if (scanf("%d", &number_of_commands) != 1)
+    {
+        return ERROR_SCANF;
+    }
+
+    Node* root = NULL;
+
+    ExecuteCommands(root, number_of_commands);
 
     return 0;
 }
