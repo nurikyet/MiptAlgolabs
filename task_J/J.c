@@ -11,9 +11,9 @@
 
 enum Status
 {
-    NO_ERROR                   = 0,
-    ERROR_SCANF                = 1,
-    ERROR_OF_ALLOCATING_MEMORY = 2,
+    NO_ERROR                   =  0,
+    ERROR_SCANF                =  1,
+    ERROR_OF_ALLOCATING_MEMORY =  2,
     ERROR_SIZE                 = -1
 };
 
@@ -286,7 +286,7 @@ void SiftDown(Heap* hp, int index)
 
     if (index >= hp->size) return;
 
-    while(index * 2 + 1 < hp->size)
+    while (GetLeftChild(index) < hp->size)
     {
         if (FindLevel(index) == 1)                                   //уровень минимумов
         {
@@ -294,11 +294,11 @@ void SiftDown(Heap* hp, int index)
             if (hp->arr[index] > hp->arr[i_min])
             {
                 swap(&(hp->arr[index]), &(hp->arr[i_min]));
-                if (i_min >= 2*(2*index + 1) + 1)
+                if (i_min >= GetLeftChild(GetLeftChild(index)))
                 {
-                    if (hp->arr[i_min] > hp->arr[(i_min - 1) / 2])
+                    if (hp->arr[i_min] > hp->arr[GetParent(i_min)])
                     {
-                        swap(&(hp->arr[i_min]), &(hp->arr[(i_min - 1)/ 2]));
+                        swap(&(hp->arr[i_min]), &(hp->arr[GetParent(i_min)]));
 
                     }
                 }
@@ -320,11 +320,11 @@ void SiftDown(Heap* hp, int index)
             if (hp->arr[index] < hp->arr[i_max])
             {
                 swap(&(hp->arr[index]), &(hp->arr[i_max]));
-                if (i_max >= 2*(2*index + 1) + 1)
+                if (i_max >= GetLeftChild(GetLeftChild(index)))
                 {
-                    if (hp->arr[i_max] < hp->arr[(i_max - 1) / 2])
+                    if (hp->arr[i_max] < hp->arr[GetParent(i_max)])
                     {
-                        swap(&(hp->arr[i_max]), &(hp->arr[(i_max - 1)/ 2]));
+                        swap(&(hp->arr[i_max]), &(hp->arr[GetParent(i_max)]));
 
                     }
                 }
