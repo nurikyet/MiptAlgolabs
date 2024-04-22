@@ -2,67 +2,94 @@
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
+#include <stdbool.h>
 #include <time.h>
 #include "MedianOfMedianQsort.h"
 #include "../Common.h"
 
-#define ERROR -1;
-#define TRUE 1;
+#define ERROR -1
+#define TRUE 1
+#define ARR_SIZE 5
 
 static void Qsort(int* arr, int left, int right);
 
-int FindMedian(int* arr, int left, int right)
+size_t Select(int* arr, size_t left, size_t right, size_t n);
+size_t GetPivot(int* arr, size_t left, size_t right);
+
+void InsertionSort(int* arr, size_t left, size_t right);
+
+
+
+size_t GetPivot(int* arr, size_t left, size_t right) 
 {
-    int n = right - left + 1;
-    int i, medianIndex = 0;
-    int numMedians = (n + 4) / 5;
-    int* medians = (int*)calloc(numMedians, sizeof(int));
-    if (medians == NULL)
+    if (right - left < ARR_SIZE) 
     {
-        return ERROR;
+        InsertionSort(arr, left, right);
+        return (left + right) / 2;
     }
-
-    for(i = 0; i < n / 5; i++)
+    for (size_t i = left; i <= right; i += ARR_SIZE) 
     {
-
-        for(int j = 0; j < 5; j++)
+        size_t sub_right = i + ARR_SIZE - 1;
+        if (sub_right > right) 
         {
-            for(int k = j + 1; k < 5; k++)
-            {
-                if(arr[left + 5 * i + j] > arr[left + 5 * i + k])
-                {
-                    swap(&arr[left + 5 * i + j], &arr[left + 5 * i + k], sizeof(int));
-                }
-            }
+            sub_right = right;
         }
-        medians[i] = arr[left + 5 * i + 2];
+        size_t median5 = (i + sub_right) / 2;
+        swap(&arr[median5], &arr[left + (i - left) / ARR_SIZE], sizeof(int));
     }
 
-    if(n % 5 != 0)
+    size_t mid = (right - left) / (2 * ARR_SIZE) + left + 1;
+
+    return Select(arr, left, left + (right - left) / ARR_SIZE, mid);
+}
+
+void InsertionSort(int* arr, size_t left, size_t right) 
+{
+    for (size_t i = left + 1; i < right; ++i) 
     {
-        int remaining = n % 5;
-        for(int j = 0; j < remaining; j++)
+        int current = arr[i];
+        int j = i - 1;
+
+        while (j >= 0 && arr[j] > current) 
         {
-            for(int k = j + 1; k < remaining; k++)
-            {
-                if(arr[left + n - remaining + j] > arr[left + n - remaining + k])
-                {
-                    swap(&arr[left + n - remaining + j], &arr[left + n - remaining + k], sizeof(int));
-                }
-            }
+            arr[j + 1] = arr[j];
+            j = j - 1;
         }
-        medians[numMedians - 1] = arr[left + n - remaining/2 - 1];
+
+        arr[j + 1] = current;
     }
+}
 
-    medianIndex = numMedians == 1 ? medians[0] : FindMedian(medians, 0, numMedians - 1);
-
-    free(medians);
-    return medianIndex;
+size_t Select(int* arr, size_t left, size_t right, size_t n) 
+{
+    assert(arr != NULL);
+    while (true) 
+    {
+        if (left == right) 
+        {
+            return left;
+        }
+        size_t pivot_index = GetPivot(arr, left, right);
+        pivot_index        = Partition(arr, left, right);
+        if (n == pivot_index) 
+        {
+            return n;
+        } 
+        else if (n < pivot_index) 
+        {
+            right = pivot_index - 1;
+        } 
+        else 
+        {
+            left = pivot_index + 1;
+        }
+    }
 }
 
 static int Partition(int* arr, int left, int right)
 {
-    int pivot   = FindMedian(arr, left, right);
+    int pivot_idx = GetPivot(arr, left, right);
+    int pivot   = arr[pivot_idx];
     int i       = left;
     int j       = right;
     while(i <= j)
@@ -84,11 +111,11 @@ static int Partition(int* arr, int left, int right)
     return j;
 }
 
-static void Qsort(int* arr, int left, int right)
+static void Qsort(int* arr, size_t left, size_t right)
 {
     if (left < right)
     {
-        int piv_idx = Partition(arr, left, right);
+        size_t piv_idx = Partition(arr, left, right);
         Qsort(arr, left, piv_idx);
         Qsort(arr, piv_idx + 1, right);
     }
@@ -99,5 +126,5 @@ void RandMedianQsort(int* arr, size_t size)
     assert(size > 0);
     assert(arr != NULL);
 
-    Qsort(arr, 0, size - 1);
+    Qsort(arr, (size_t)0, size - 1);
 }
