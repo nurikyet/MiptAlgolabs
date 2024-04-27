@@ -113,6 +113,23 @@ Node* LeftRotate(Node* node)
     return new_node;
 }
 
+Node* PerformRotation(Node* node)
+{
+    Node* new_node = NULL;
+    if (node->left != NULL && node->right != NULL)
+    {
+        if (node->left->priority > node->right->priority)
+        {
+            new_node = RightRotate(node);
+        }
+        else
+        {
+            new_node = LeftRotate(node);
+        }
+    }
+    return new_node;
+}
+
 Node* TreeMerge(Node* left, Node* right)
 {
     
@@ -212,27 +229,6 @@ Node* FindMaxLeftChild(Node* node)
     return max_left_child;
 }
 
-Node* PerformRotation(Node* node)
-{
-    Node* new_root = NULL;
-    if (node->left != NULL && node->right != NULL)
-    {
-        if (node->left->priority > node->right->priority)
-        {
-            new_root = node->left;
-            node->left = new_root->right;
-            new_root->right = node;
-        }
-        else
-        {
-            new_root = node->right;
-            node->right = new_root->left;
-            new_root->left = node;
-        }
-    }
-    return new_root;
-}
-
 Node* NodeDelete(Node* root, int key)
 {
     if (root  == NULL)
@@ -288,8 +284,7 @@ Node* NodeDelete(Node* root, int key)
 }
 
 Node* FindNode(Node* root, int key)
-{
-    
+{    
     while (root != NULL)
     {
         if (key == root->key)
@@ -358,26 +353,6 @@ int TreeKTH(Node* root, int k)
     return TreeKTH(root->right, k - size_left - 1);
 }
 
-bool NodeExists(Node* root, int key)
-{    
-    while (root != NULL)
-    {
-        if (key == root->key)
-        {
-            return true;
-        }
-        else if (key > root->key)
-        {
-            root = root->right;
-        }
-        else
-        {
-            root = root->left;
-        }
-    }
-    return false;
-}
-
 Node* NodePrev(Node* root, int key)
 {
     Node* prev_node = NULL;
@@ -416,7 +391,7 @@ int ExecuteCommands(FILE* file_in, Node** root_ptr)
     {
         if (strcmp(operation, "insert")    == 0)
         {
-            if (NodeExists(root, value)    == 0)
+            if (FindNode(root, value)    == NULL)
             {
                 int priority = rand();
                 root = NodeInsert(root, value, priority);
@@ -424,14 +399,14 @@ int ExecuteCommands(FILE* file_in, Node** root_ptr)
         }
         else if (strcmp(operation, "delete") == 0)
         {
-            if (NodeExists(root, value) == 1)
+            if (FindNode(root, value) != NULL)
             {
                 root = NodeDelete(root, value);
             }
         }
         else if (strcmp(operation, "exists") == 0)
         {
-            if (NodeExists(root, value) == 1)   
+            if (FindNode(root, value) != NULL)   
             {
                 printf("true\n");
             } 
