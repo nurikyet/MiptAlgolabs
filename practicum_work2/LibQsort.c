@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 #include <string.h>
 
 const int MAX_LEN = 1000000;
@@ -11,13 +12,13 @@ int compare(const void *a, const void *b)
 
 int main(int argc, char *argv[])
 {
-    char str[100];
+    char str[UCHAR_MAX];
     strcpy(str, argv[1]);
     strcat(str, "_");
     strcat(str, argv[2]);
 
-    char file_in_name[100];
-    char file_out_name[100];
+    char file_in_name[UCHAR_MAX];
+    char file_out_name[UCHAR_MAX];
 
     strcpy(file_in_name, str);
     strcat(file_in_name, ".in");
@@ -49,5 +50,8 @@ int main(int argc, char *argv[])
     fprintf(file_out, "\n");
     free(array);
 
+    fclose(file_in);
+    fclose(file_out);
+    
     return 0;
 }

@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <limits.h>
 #include <string.h>
+#include <stdbool.h>
 #include <time.h>
 #include "HeapSort.h"
 #include "../Common.h"

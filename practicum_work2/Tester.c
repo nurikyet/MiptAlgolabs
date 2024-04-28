@@ -166,8 +166,8 @@ void Tester(int from, int to, int step, const char* file_path, const char* file_
     {
         for (int j = 0; j < K; j++)
         {
-            char file1[256];
-            char file2[256];
+            char file1[UCHAR_MAX];
+            char file2[UCHAR_MAX];
 
             sprintf(file1, "%s%d_%d.in", file_path, i, j);
             sprintf(file2, "%s%d_%d.out", file_path, i, j);

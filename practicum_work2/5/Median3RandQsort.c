@@ -3,12 +3,13 @@
 #include <assert.h>
 #include <string.h>
 #include <time.h>
-#include "MedianQsort.h"
+#include "Median3RandQsort.h"
+#include "CommonQsort.h"
 #include "../Common.h"
 
 static void Qsort(int* arr, size_t left, size_t right);
 
-int GiveMiddle(int first, int second, int third) 
+int GetMedian(int first, int second, int third) 
 {
     if (first < second && second < third) 
     {
@@ -24,33 +25,22 @@ int GiveMiddle(int first, int second, int third)
     }
 }
 
+
 static size_t Partition(int* arr, size_t left, size_t right)
 {
-    size_t piv_idx = left + (right - left) / 2;
-    int pivot      = GiveMiddle(arr[left], arr[piv_idx], arr[right]);
-    size_t i       = left;
-    size_t j       = right;
-    while(i <= j)
-    {
-        while(arr[i] < pivot)
-        {
-            i++;
-        }
-        while(arr[j] > pivot)
-        {
-            j--;
-        }
-        if(i >= j)
-        {
-            return j;
-        }
-        swap(&arr[i++], &arr[j--], sizeof(int));
-    }
-    return j;
+    assert(arr != NULL);
+
+    int pivot   = GetMedian(arr[left + (rand() % (right - left + 1))], 
+                            arr[left + (rand() % (right - left + 1))], 
+                            arr[left + (rand() % (right - left + 1))]);
+                            
+    return PartitionHelper(arr, left, right, pivot);
 }
 
-static void Qsort(int* arr, size_t left, size_t right)
+void Qsort(int* arr, size_t left, size_t right)
 {
+    assert(arr != NULL);
+
     if (left < right)
     {
         size_t piv_idx = Partition(arr, left, right);
@@ -59,10 +49,10 @@ static void Qsort(int* arr, size_t left, size_t right)
     }
 }
 
-void MedianQsort(int* arr, size_t size)
+void Median3RandQsort(int* arr, size_t size)
 {
     assert(size > 0);
     assert(arr != NULL);
 
-    Qsort(arr, 0, size - 1);
+    Qsort(arr, (size_t)0, size - 1);
 }

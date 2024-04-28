@@ -4,6 +4,7 @@
 #include <string.h>
 #include <time.h>
 #include "IntroQsort.h"
+#include "../5/CommonQsort.h"
 #include "../Common.h"
 
 static void Qsort(int* arr, int left, int right);
@@ -12,25 +13,8 @@ int IntroHoarPartition(int* arr, int left, int right)
 {
     int piv_idx = left + (right - left) / 2;
     int pivot   = arr[piv_idx];
-    int i       = left;
-    int j       = right;
-    while(i <= j)
-    {
-        while(arr[i] < pivot)
-        {
-            i++;
-        }
-        while(arr[j] > pivot)
-        {
-            j--;
-        }
-        if(i >= j)
-        {
-            return j;
-        }
-        swap(&arr[i++], &arr[j--], sizeof(int));
-    }
-    return j;
+
+    return PartitionHelper(arr, left, right, pivot);
 }
 
 static void Qsort(int* arr, int left, int right)

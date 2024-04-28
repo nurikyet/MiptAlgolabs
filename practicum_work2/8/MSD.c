@@ -54,7 +54,8 @@ int RadixSortMSD(int *arr, int *result, int size, int shift)
             }
         }
     }
-
+    free(count);
+    free(pref_cnt);
     return TRUE;
 }
 

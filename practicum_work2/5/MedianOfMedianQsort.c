@@ -5,13 +5,14 @@
 #include <stdbool.h>
 #include <time.h>
 #include "MedianOfMedianQsort.h"
+#include "CommonQsort.h"
 #include "../Common.h"
 
 #define ERROR -1
 #define TRUE 1
 #define ARR_SIZE 5
 
-static void Qsort(int* arr, int left, int right);
+static void Qsort(int* arr, size_t left, size_t right);
 
 size_t Select(int* arr, size_t left, size_t right, size_t n);
 size_t GetPivot(int* arr, size_t left, size_t right);
@@ -90,25 +91,8 @@ static int Partition(int* arr, int left, int right)
 {
     int pivot_idx = GetPivot(arr, left, right);
     int pivot   = arr[pivot_idx];
-    int i       = left;
-    int j       = right;
-    while(i <= j)
-    {
-        while(arr[i] < pivot)
-        {
-            i++;
-        }
-        while(arr[j] > pivot)
-        {
-            j--;
-        }
-        if(i >= j)
-        {
-            return j;
-        }
-        swap(&arr[i++], &arr[j--], sizeof(int));
-    }
-    return j;
+
+    return PartitionHelper(arr, left, right, pivot);
 }
 
 static void Qsort(int* arr, size_t left, size_t right)

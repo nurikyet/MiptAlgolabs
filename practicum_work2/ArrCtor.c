@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 #include <string.h>
 #include <time.h>
 
 int main(int argc, char *argv[])
 {
-    char str[100];
+    char str[UCHAR_MAX];
     strcpy(str, argv[1]);         //size
     strcat(str, "_");
     strcat(str, argv[2]);         //k - number of test
@@ -31,5 +32,7 @@ int main(int argc, char *argv[])
         fprintf(file, "%d ", rand() % (max_val + 1));
     }
     fprintf(file, "\n");
+
+    fclose(file);
     return 0;
 }
