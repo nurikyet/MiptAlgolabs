@@ -4,6 +4,7 @@
 #include <string.h>
 #include <time.h>
 #include "../Common.h"
+#include "../5/CommonQsort.h"
 
 #include "OneBranchHoaraQsort.h"
 
@@ -14,26 +15,9 @@ static size_t Partition(int* arr, size_t left, size_t right)
     assert(arr != NULL);
 
     size_t piv_idx = left + (right - left) / 2;
-    int pivot   = arr[piv_idx];
-    size_t i       = left;
-    size_t j       = right;
-    while(i <= j)
-    {
-        while(arr[i] < pivot)
-        {
-            i++;
-        }
-        while(arr[j] > pivot)
-        {
-            j--;
-        }
-        if(i >= j)
-        {
-            return j;
-        }
-        swap(&arr[i++], &arr[j--], sizeof(int));
-    }
-    return j;
+    int pivot      = arr[piv_idx];
+    
+    return PartitionHelper(arr, left, right, pivot);
 }
 
 static void Qsort(int* arr, size_t left, size_t right)

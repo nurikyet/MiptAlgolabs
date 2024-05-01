@@ -7,17 +7,17 @@
 #include "../5/CommonQsort.h"
 #include "../Common.h"
 
-static void Qsort(int* arr, int left, int right);
+static void Qsort(int* arr, size_t left, size_t right);
 
-int IntroHoarPartition(int* arr, int left, int right)
+size_t IntroHoarPartition(int* arr, size_t left, size_t right)
 {
-    int piv_idx = left + (right - left) / 2;
-    int pivot   = arr[piv_idx];
+    size_t piv_idx = left + (right - left) / 2;
+    int    pivot   = arr[piv_idx];
 
     return PartitionHelper(arr, left, right, pivot);
 }
 
-static void Qsort(int* arr, int left, int right)
+static void Qsort(int* arr, size_t left, size_t right)
 {
     if (left < right)
     {
@@ -32,5 +32,5 @@ void IntroQsort(int* arr, size_t size)
     assert(size > 0);
     assert(arr != NULL);
 
-    Qsort(arr, 0, size - 1);
+    Qsort(arr, (size_t)0, size - 1);
 }

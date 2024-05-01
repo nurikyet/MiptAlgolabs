@@ -126,26 +126,26 @@ static void TestQuickPivot(const int from, const int to, const int step,
     Tester(from, to, step, src_path, dest_path, RandQsort);
 }
 
-void PrintArr(int* arr, int size)
+void PrintArr(int* arr, size_t size)
 {
     printf("Massiv size %d\n", size);
 
-    for (int i = 0; i < size; i++)
+    for (size_t i = 0; i < size; i++)
     {
         printf("%d ", arr[i]);        
     }    
     printf("\n");
 }
 
-void ArrCtor(FILE* file, int* arr, int size)
+void ArrCtor(FILE* file, int* arr, size_t size)
 {
-    for (int i = 0; i < size; i++)
+    for (size_t i = 0; i < size; i++)
     {
         fscanf(file, "%d", &arr[i]);        
     }
 }
 
-void GiveTime(void (*sorting_algorithm)(int*, size_t), FILE* file, int* arr, int size)
+void GiveTime(void (*sorting_algorithm)(int*, size_t), FILE* file, int* arr, size_t size)
 {
     if (size == 0) return;
 
@@ -186,7 +186,7 @@ void Tester(int from, int to, int step, const char* file_path, const char* file_
                 return;       
             }
 
-            Testing(sorting_algorithm, file_res, file_in, file_out, i);
+            Testing(sorting_algorithm, file_res, file_in, file_out, (size_t)i);
 
             fclose(file_in);
             fclose(file_out);  
@@ -194,7 +194,7 @@ void Tester(int from, int to, int step, const char* file_path, const char* file_
     }
 }
 
-void Testing(void (*sorting_algorithm)(int*, size_t), const char* res_name, FILE* file_in, FILE* file_out, int size)
+void Testing(void (*sorting_algorithm)(int*, size_t), const char* res_name, FILE* file_in, FILE* file_out, size_t size)
 {
     if (size == 0) return;
 

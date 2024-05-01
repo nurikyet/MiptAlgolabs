@@ -68,7 +68,7 @@ static void TestQuickPartitions(const int from, const int to, const int step,
 void Testing(void (*sorting_algorithm)(int*, size_t), const char* res_name, FILE* file_in, FILE* file_out, int size);
 void Tester(int from, int to, int step, const char* file_path, const char* file_res, void (*sorting_algorithm)(int*, size_t));
 void GiveTime(void (*sorting_algorithm)(int*, size_t), FILE* file, int* arr, int size);
-void ArrCtor(FILE* file, int* arr, int size);
+void ArrCtor(FILE* file, int* arr, size_t size);
 void PrintArr(int* arr, int size);
 void GetEightsPointData();
 void GetSixthPointData();

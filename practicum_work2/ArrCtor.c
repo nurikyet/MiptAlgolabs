@@ -3,6 +3,7 @@
 #include <limits.h>
 #include <string.h>
 #include <time.h>
+#include "Common.h"
 
 int main(int argc, char *argv[])
 {
@@ -13,6 +14,10 @@ int main(int argc, char *argv[])
     strcat(str, ".in");
 
     FILE* file = fopen(str, "w");
+    if (file == NULL)
+    {
+        return ERROR_FILE;
+    }
 
     if (argc <= 4)
     {

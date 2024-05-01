@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <limits.h>
 #include <string.h>
+#include "Common.h"
 
 const int MAX_LEN = 1000000;
 
@@ -27,14 +28,22 @@ int main(int argc, char *argv[])
     strcat(file_out_name, ".out");
 
     FILE* file_in = fopen(file_in_name, "r");
+    if (file_in == NULL)
+    {
+        return ERROR_FILE;
+    }
     FILE* file_out = fopen(file_out_name, "w");
+    if (file_out == NULL)
+    {
+        return ERROR_FILE;
+    }
 
 
     int n = 0;
     int* array = (int*)calloc(MAX_LEN, sizeof(int));
     if (array == NULL)
     {
-        return;
+        return ERROR_OF_ALLOCATING_MEMORY;
     }
 
     while (fscanf(file_in, "%d", &array[n]) == 1)
