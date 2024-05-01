@@ -1,0 +1,1 @@
+void LomutoQsort(int* arr, size_t size);

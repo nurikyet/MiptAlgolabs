@@ -1,0 +1,1 @@
+void FlagQsort(int* arr, size_t size);

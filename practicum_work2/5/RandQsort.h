@@ -1,0 +1,1 @@
+void RandQsort(int* arr, size_t size);

@@ -1,0 +1,1 @@
+void MedianQsort(int* arr, size_t size);

@@ -1,0 +1,1 @@
+void HoaraQsort(int* arr, size_t size);
