@@ -465,15 +465,15 @@ int ExecuteCommands(FILE* file_in, Node** root_ptr)
     return NO_ERROR;
 }
 
-void RootDelete(Node* root)
+void TreeDelete(Node* root)
 {
     if (root == NULL)
     {
         return;
     }
 
-    RootDelete(root->left);  
-    RootDelete(root->right); 
+    TreeDelete(root->left);  
+    TreeDelete(root->right); 
     free(root); 
 }
 
@@ -487,7 +487,7 @@ int main()
     }
 
     ExecuteCommands(file_in, &root);
-    RootDelete(root); 
+    TreeDelete(root); 
     fclose(file_in);
     return 0;
 }
