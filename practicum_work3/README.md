@@ -20,7 +20,7 @@
 
 ### График
 ---
-   ![резы тестов](./BinHeap/pictures/heap_graphs.png)
+   ![результаты тестов](./BinHeap/pictures/heap_graphs.png)
 ---
 
 ## Вывод

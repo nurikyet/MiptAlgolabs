@@ -1,5 +1,11 @@
 #include "Heap.h"
 
+void swap(void* a, void* b, size_t elem_size);
+void SiftDown(Heap* hp, size_t index);
+void SiftUp(Heap* hp, size_t index);
+size_t GetChild(size_t index, size_t k, size_t i);
+size_t GetParent(size_t index, size_t k);
+
 void swap(void* first, void* second, size_t elem_size)
 {
     void* temp = calloc(1, elem_size);
@@ -15,28 +21,28 @@ void swap(void* first, void* second, size_t elem_size)
     free(temp);
 }
 
-int GetParent(int index, int k)
+size_t GetParent(size_t index, size_t k)
 {
     if (index < 1) return 0;
     return (index - 1) / k;
 }
 
-int GetChild(int index, int k, int i)
+size_t GetChild(size_t index, size_t k, size_t i)
 {
     return index * k + i;
 }
 
-int GetMax(Heap* hp, int index)
+int GetMax(Heap* hp, size_t index)
 {
     assert(hp != NULL);
  
-    int max_index = index;
+    size_t max_index = index;
     int max_value = INT_MIN;
-    int k         = hp->children;
+    size_t k         = hp->children;
 
     for (int i = 1; i < k + 1; i++)
     {
-        int child = GetChild(index, k, i);
+        size_t child = GetChild(index, k, i);
         if (child < hp->size && hp->arr[child] > max_value)
         {
             max_index = child;
@@ -47,12 +53,12 @@ int GetMax(Heap* hp, int index)
     return max_index;
 }
 
-void SiftDown(Heap* hp, int index)
+void SiftDown(Heap* hp, size_t index)
 {
     assert(hp != NULL);
 
     if (index >= hp->size) return;
-    int k = hp->children;
+    size_t k = hp->children;
     while(index * k + 1 < hp->size)
     {
         int i_max = GetMax(hp, index);
@@ -68,11 +74,11 @@ void SiftDown(Heap* hp, int index)
     }
 }
 
-void SiftUp(Heap* hp, int index)
+void SiftUp(Heap* hp, size_t index)
 {
     assert(hp != NULL);
 
-    int parent    = 0;
+    size_t parent    = 0;
 
     while(index != 0)
     {
@@ -113,7 +119,7 @@ void HeapInsert(Heap* hp, int data)
     hp->arr[hp->size] = data;
     hp->size++;
 
-    int i = hp->size;
+    size_t i = hp->size;
     SiftUp(hp, i - 1);
 
 }

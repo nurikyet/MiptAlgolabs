@@ -8,7 +8,7 @@ for line in input_arr:
     x_arr.append(int(data[0]))
     y_arr.append(float(data[1]))
 input_arr.close()
-plt.plot(x_arr, y_arr, label = 'Куча с обычными вставками')
+plt.plot(x_arr, y_arr, label = 'Построение кучи с обычными вставками')
 
 input_list = open('HeapLine/heap_line_res.out', 'r')
 x_list = []
@@ -19,7 +19,7 @@ for line in input_list:
     y_list.append(float(data[1]))
 input_list.close()
 
-plt.plot(x_list, y_list, label = 'Куча с линейным алгоритмом')
+plt.plot(x_list, y_list, label = 'Построение кучи с линейным алгоритмом')
 
 plt.xlabel('Количество вставок')
 plt.ylabel('Время (с)')

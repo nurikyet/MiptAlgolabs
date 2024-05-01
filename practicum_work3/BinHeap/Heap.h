@@ -15,8 +15,8 @@ typedef struct
 {
     int* arr;
     int  children;
-    int  size;
-    int  capacity;
+    size_t  size;
+    size_t  capacity;
 } Heap;
 
 enum Status
@@ -26,16 +26,10 @@ enum Status
     ERROR_SCANF                = -2
 };
 
-void swap(void* a, void* b, size_t elem_size);
-void SiftDown(Heap* hp, int index);
-void SiftUp(Heap* hp, int index);
 void HeapInsert(Heap* hp, int data);
 void HeapDtor(Heap* h);
 
-
-int GetChild(int index, int k, int i);
-int GetParent(int index, int k);
-int GetMax(Heap* hp, int index);
+int GetMax(Heap* hp, size_t index);
 int ExtractMax(Heap* h);
 
 #endif 
