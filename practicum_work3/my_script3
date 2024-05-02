@@ -1,0 +1,22 @@
+#!/bin/bash
+
+TESTS="tests"
+
+k=1
+
+max_rand=32767
+
+from=100000
+to=1000000
+step=100000
+
+mkdir $TESTS
+
+for ((i=$from; i <= $to; i+=$step))
+do
+for ((j=0; j < $k; j++))
+do
+./ArrayCtor $i $j $max_rand 
+done
+done
+
