@@ -258,23 +258,17 @@ void Clear(Node *node)
     free(node);
 }
 
-int main()
+int AddData(int number_of_elements)
 {
-    int number_of_elements = 0;
-    if (scanf("%d", &number_of_elements) != 1)
-    {
-        return ERROR_SCANF;
-    }
-
     for (int i = 0; i < number_of_elements; i++) 
     {
-        char* pilot  = (char*)calloc(LINE_LEN, sizeof(char));
+        char* pilot  = (char*)calloc(LINE_LEN + 1, sizeof(char));
         if (pilot == NULL)
         {
             return ERROR_OF_ALLOCATING_MEMORY;
         }
 
-        char* ship   = (char*)calloc(LINE_LEN, sizeof(char));
+        char* ship   = (char*)calloc(LINE_LEN + 1, sizeof(char));
         if (ship == NULL)
         {
             return ERROR_OF_ALLOCATING_MEMORY;
@@ -289,15 +283,14 @@ int main()
         Insert(ship, pilot);
     }
 
-    int number_of_requests = 0;
-    if (scanf("%d", &number_of_requests) != 1)
-    {
-        return ERROR_SCANF;
-    }
+    return NO_ERROR;
+}
 
+int FulfillRequests(int number_of_requests)
+{
     for (int i = 0; i < number_of_requests; i++) 
     {
-        char* request = (char*)calloc(LINE_LEN, sizeof(char));
+        char* request = (char*)calloc(LINE_LEN + 1, sizeof(char));
         if (request == NULL)
         {
             return ERROR_OF_ALLOCATING_MEMORY;
@@ -314,6 +307,26 @@ int main()
         }
         free(request);
     }
+    return NO_ERROR;
+}
+
+int main()
+{
+    int number_of_elements = 0;
+    if (scanf("%d", &number_of_elements) != 1)
+    {
+        return ERROR_SCANF;
+    }
+
+    AddData(number_of_elements);
+
+    int number_of_requests = 0;
+    if (scanf("%d", &number_of_requests) != 1)
+    {
+        return ERROR_SCANF;
+    }
+
+    FulfillRequests(number_of_requests);
 
     Clear(root);
 
