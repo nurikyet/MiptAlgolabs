@@ -378,7 +378,7 @@ Node* NodePrev(Node* root, int key)
 
 int ExecuteCommands(FILE* file_in, Node** root_ptr)
 {
-    char* operation = (char*)calloc(LINE_LEN, sizeof(char));
+    char* operation = (char*)calloc(LINE_LEN + 1, sizeof(char));
     if (operation   == NULL)
     {
         return ERROR_OF_ALLOCATING_MEMORY;
