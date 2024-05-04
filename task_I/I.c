@@ -24,7 +24,22 @@ typedef struct Node
     struct Node* parent;
 } Node;
 
-Node* root = NULL;
+typedef struct Tree
+{
+    Node* root;
+} Tree;
+
+Tree* TreeCtor()
+{
+    Tree* tree = (Tree*)calloc(1, sizeof(Tree));   
+    if (tree == NULL)
+    {
+        return (Tree*)ERROR_OF_ALLOCATING_MEMORY;
+    } 
+    tree->root = NULL;
+
+    return tree;
+}
 
 Node* NodeCtor(char* key, char* value) 
 {
@@ -47,7 +62,7 @@ Node* NodeCtor(char* key, char* value)
     return new_node;
 }
 
-void RightRotate(Node *node) 
+void RightRotate(Tree* tree, Node *node) 
 {
     assert(node != NULL);
     
@@ -62,7 +77,7 @@ void RightRotate(Node *node)
     
     if (node->parent == NULL) 
     {
-        root = left_child;
+        tree->root = left_child;
     } 
     
     else if (node == node->parent->left) 
@@ -79,7 +94,7 @@ void RightRotate(Node *node)
     node->parent = left_child;    
 }
 
-void LeftRotate(Node *node) 
+void LeftRotate(Tree* tree, Node *node) 
 {
     assert(node != NULL);
     
@@ -94,7 +109,7 @@ void LeftRotate(Node *node)
     
     if (node->parent == NULL) 
     {
-        root = right_child;
+        tree->root = right_child;
     } 
 
     else if (node == node->parent->left) 
@@ -112,7 +127,7 @@ void LeftRotate(Node *node)
     
 }
 
-void Splay(Node *node) 
+void Splay(Tree* tree, Node *node) 
 {
     assert(node != NULL);
     while (node->parent != NULL) 
@@ -122,45 +137,45 @@ void Splay(Node *node)
             // Zig-операция (одиночный поворот)
             if (node == node->parent->left) 
             {
-                RightRotate(node->parent);
+                RightRotate(tree, node->parent);
             } 
             else 
             {
-                LeftRotate(node->parent);
+                LeftRotate(tree, node->parent);
             }
         } 
 
         else if (node == node->parent->left && node->parent == node->parent->parent->left) 
         {
             // Zig-zig-операция (двойной поворот влево)
-            RightRotate(node->parent->parent);
-            RightRotate(node->parent);
+            RightRotate(tree, node->parent->parent);
+            RightRotate(tree, node->parent);
         } 
         
         else if (node == node->parent->right && node->parent == node->parent->parent->right) 
         {
             // Zig-zig-операция (двойной поворот вправо)
-            LeftRotate(node->parent->parent);
-            LeftRotate(node->parent);
+            LeftRotate(tree, node->parent->parent);
+            LeftRotate(tree, node->parent);
         } 
         
         else if (node == node->parent->right && node->parent == node->parent->parent->left) 
         {
             // Zig-zag-операция (двойной поворот)
-            LeftRotate(node->parent);
-            RightRotate(node->parent);
+            LeftRotate(tree, node->parent);
+            RightRotate(tree, node->parent);
         } 
         
         else 
         {
             // Zig-zag-операция (двойной поворот)
-            RightRotate(node->parent);
-            LeftRotate(node->parent);
+            RightRotate(tree, node->parent);
+            LeftRotate(tree, node->parent);
         }
     }
 }
 
-void NodeInsert(Node *current, Node *new_node) 
+void NodeInsert(Tree* tree, Node* current, Node* new_node) 
 {
     assert(current  != NULL);
     assert(new_node != NULL);
@@ -175,7 +190,7 @@ void NodeInsert(Node *current, Node *new_node)
         
         else 
         {            
-            NodeInsert(current->left, new_node);
+            NodeInsert(tree, current->left, new_node);
         }
     } 
     else 
@@ -188,29 +203,29 @@ void NodeInsert(Node *current, Node *new_node)
         
         else 
         {            
-            NodeInsert(current->right, new_node);
+            NodeInsert(tree, current->right, new_node);
         }
     }
 }
 
-void Insert(char* key, char* value) 
+void Insert(Tree* tree, char* key, char* value) 
 {
     assert(key   != NULL);
     assert(value != NULL);
     
     Node *new_node = NodeCtor(key, value);
-    if (root == NULL) 
+    if (tree->root == NULL) 
     {
-        root = new_node;
+        tree->root = new_node;
     } 
     
     else 
     {        
-        NodeInsert(root, new_node);
+        NodeInsert(tree, tree->root, new_node);
     }
 }
 
-Node* NodeSearch(Node* current, char* key) 
+Node* NodeSearch(Tree* tree, Node* current, char* key) 
 {
     assert(current != NULL);
     assert(key     != NULL);
@@ -222,24 +237,24 @@ Node* NodeSearch(Node* current, char* key)
     
     else if (strcmp(key, current->key) < 0) 
     {        
-        return NodeSearch(current->left, key);
+        return NodeSearch(tree, current->left, key);
     } 
     
     else 
     {        
-        return NodeSearch(current->right, key);
+        return NodeSearch(tree, current->right, key);
     }
 }
 
-Node* Search(char* key) 
+Node* Search(Tree* tree, char* key) 
 {
     assert(key != NULL);
     
-    Node *found_node = NodeSearch(root, key);
+    Node *found_node = NodeSearch(tree, tree->root, key);
 
     if (found_node != NULL) 
     {        
-        Splay(found_node);
+        Splay(tree, found_node);
         return found_node;
     }
     return NULL;
@@ -258,7 +273,7 @@ void Clear(Node *node)
     free(node);
 }
 
-int AddData(int number_of_elements)
+int AddData(Tree* tree, int number_of_elements)
 {
     for (int i = 0; i < number_of_elements; i++) 
     {
@@ -279,14 +294,14 @@ int AddData(int number_of_elements)
             return ERROR_SCANF;
         }
 
-        Insert(pilot, ship);
-        Insert(ship, pilot);
+        Insert(tree, pilot, ship);
+        Insert(tree, ship, pilot);
     }
 
     return NO_ERROR;
 }
 
-int FulfillRequests(int number_of_requests)
+int FulfillRequests(Tree* tree, int number_of_requests)
 {
     for (int i = 0; i < number_of_requests; i++) 
     {
@@ -300,7 +315,7 @@ int FulfillRequests(int number_of_requests)
         {
             return ERROR_SCANF;
         }
-        Node* found_node = Search(request);
+        Node* found_node = Search(tree, request);
         if (found_node != NULL) 
         {
             printf("%s\n", found_node->value);
@@ -318,7 +333,9 @@ int main()
         return ERROR_SCANF;
     }
 
-    AddData(number_of_elements);
+    Tree* tree = TreeCtor();
+
+    AddData(tree, number_of_elements);
 
     int number_of_requests = 0;
     if (scanf("%d", &number_of_requests) != 1)
@@ -326,9 +343,10 @@ int main()
         return ERROR_SCANF;
     }
 
-    FulfillRequests(number_of_requests);
+    FulfillRequests(tree, number_of_requests);
 
-    Clear(root);
+    Clear(tree->root);
+    free(tree);
 
     return 0;
 }
