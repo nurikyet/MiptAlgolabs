@@ -11,6 +11,16 @@ int hash1(int key, size_t table_size)
     return (key % table_size);
 }
 
+int hash2(int key, int table_size)
+{
+    int hash = table_size + 1 - (key % table_size);
+    if (hash % 2 == 0)
+    {
+        return hash + 1;
+    }
+    return hash;
+}
+
 Table* add(Table* table, int key, double load_factor) 
 {
     assert(table != NULL);
