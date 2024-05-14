@@ -26,6 +26,11 @@ int GetBalance(Node* node)
 Node* NewNode(int data) 
 {
     Node* node = (Node*)calloc(1, sizeof(Node));
+    if (node == NULL)
+    {
+        return (Node*)ERROR_OF_ALLOCATING_MEMORY;
+    }
+
     node->data = data;
     node->left = NULL;
     node->right = NULL;

@@ -74,7 +74,11 @@ Node* Insert(Node* root, int key)
 {
     if (root == NULL) 
     {
-        Node* new_node = (Node*)malloc(sizeof(Node));
+        Node* new_node = (Node*)calloc(1, sizeof(Node));
+        if (new_node == NULL)
+        {
+            return (Node*)ERROR_OF_ALLOCATING_MEMORY;
+        }
         new_node->key = key;
         new_node->left = new_node->right = NULL;
         return new_node;
@@ -87,7 +91,11 @@ Node* Insert(Node* root, int key)
         return root;
     }
     
-    Node* new_node = (Node*)malloc(sizeof(Node));
+    Node* new_node = (Node*)calloc(1, sizeof(Node));
+    if (new_node == NULL)
+    {
+        return (Node*)ERROR_OF_ALLOCATING_MEMORY;
+    }
     new_node->key = key;
     
     if (key < root->key) {
@@ -146,24 +154,3 @@ void inOrderTraversal(Node* root) {
         inOrderTraversal(root->right);
     }
 }
-/*
-int main() {
-    Node* root = NULL;
-    
-    root = Insert(root, 100);
-    root = Insert(root, 50);
-    root = Insert(root, 200);
-    
-    printf("Inorder traversal of the Splay tree: ");
-    inOrderTraversal(root);
-    
-    printf("\n");
-    
-    root = Delete(root, 50);
-    
-    printf("Inorder traversal after deleting key 50: ");
-    inOrderTraversal(root);
-    
-    return 0;
-}
-*/
