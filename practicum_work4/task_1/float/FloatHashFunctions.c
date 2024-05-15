@@ -30,44 +30,29 @@ int FloatBits(float number)
     return result % MOD; 
 }
 
-int Exponent(float number)
-{ 
-    typedef union 
-    {
-        float f;
-        struct 
-        {
-            unsigned int mantissa : 23;
-            unsigned int exponent : 8;
-            unsigned int sign : 1;
-        } parts;
-    } float_cast;
+#define GET_FLOAT_PART(number, part)      \
+    typedef union {                       \
+        float f;                          \  
+        struct {                          \
+            unsigned int mantissa : 23;   \
+            unsigned int exponent : 8;    \
+            unsigned int sign : 1;        \
+        } parts;                          \
+    } float_cast;                         \  
+    float_cast data;                      \
+    data.f  = number;                     \
+    return data.parts.part % MOD;     
 
-    float_cast data;
-    data.f  = number;
-    int ans = data.parts.exponent % MOD;
-    return ans;
+int Exponent(float number) {
+    GET_FLOAT_PART(number, exponent)
 }
 
-int Mantissa(float number)
-{
-    typedef union 
-    {
-        float f;
-        struct 
-        {
-            unsigned int mantissa : 23;
-            unsigned int exponent : 8;
-            unsigned int sign : 1;
-        } parts;
-    } float_cast;
-    float_cast data;
-    data.f  = number;
-    return data.parts.mantissa % MOD;
+int Mantissa(float number) {
+    GET_FLOAT_PART(number, mantissa)
 }
 
 int FloatMultiplyHash(float number)
 {
-    return Mantissa(number)*Exponent(number) % MOD;
+    return (Mantissa(number)*Exponent(number)) % MOD;
 }
 
